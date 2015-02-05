@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webapp>
+	<section type="project">
+		<title>Project</title>
+		<project_name attribut="input">Ads Manager</project_name>
+		<project_author attribut="input">Olivier Gaillard</project_author>
+	</section>
+	<section type="connection">
+		<title>Connection</title>
+		<server attribut="input">localhost</server>
+		<user attribut="input">ads_manager</user>
+		<password attribut="input">ads_manager</password>
+	</section>
+	<section type="database">
+		<title>Database</title>
+		<database attribut="select">ads_manager</database>
+	</section>
+	<section type="table">
+		<title>Table</title>
+		<table attribut="select">liens</table>
+		<objet attribut="input">lien</objet>
+		<objets attribut="input">liens</objets>
+	</section>
+	<section type="fields">
+		<title>Fields</title>
+		<fields attribut="field">id,rub_id,titre,url,descriptif,etat</fields>
+		<objet2 attribut="input"/>
+		<objet3 attribut="input"/>
+	</section>
+</webapp>
