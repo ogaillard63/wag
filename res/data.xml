@@ -17,13 +17,13 @@
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">links</table>
-		<objet attribut="input">link</objet>
-		<objets attribut="input">links</objets>
+		<table attribut="select">ads</table>
+		<objet attribut="input">ad</objet>
+		<objets attribut="input">ads</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,link_category_id,title,url,description,is_actived</fields>
+		<fields attribut="field">id,key,creation_date,title,slug,description,datasheet,stock,payment,photo_path,price,author_id,phone_number,hide_phone,email,password,signal,is_top,ad_category_id,nb_views,state</fields>
 
 		<objet2 attribut="input"/>
 		<objet3 attribut="input"/>
