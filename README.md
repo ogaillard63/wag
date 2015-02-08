@@ -8,4 +8,4 @@ des catégories. La table doit comporter un champ parent_id.
 
 
 # todo
-+ Régler le problème avec les objets ayant un underscore dans le nom
++ Debug du problème avec les objets ayant un underscore dans le nom
