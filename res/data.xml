@@ -7,23 +7,24 @@
 	</section>
 	<section type="connection">
 		<title>Connection</title>
-		<server attribut="input">localhost</server>
-		<user attribut="input">ads_manager</user>
-		<password attribut="input">ads_manager</password>
+		<db_server attribut="input">localhost</db_server>
+		<db_user attribut="input">ads_manager</db_user>
+		<db_password attribut="input">ads_manager</db_password>
 	</section>
 	<section type="database">
 		<title>Database</title>
-		<database attribut="select">ads_manager</database>
+		<db_base attribut="select">ads_manager</db_base>
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">tasks</table>
-		<objet attribut="input">task</objet>
-		<objets attribut="input">tasks</objets>
+		<table attribut="select">links</table>
+		<objet attribut="input">link</objet>
+		<objets attribut="input">links</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,creation_date,content</fields>
+		<fields attribut="field">id,link_category_id,title,url,description,is_actived</fields>
+
 		<objet2 attribut="input"/>
 		<objet3 attribut="input"/>
 	</section>

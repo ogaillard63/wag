@@ -48,14 +48,13 @@ switch($action) {
 
 	default:
 		$smarty->assign("titre", $translate->__('list_of_#objets#'));
-		/*$rpp = 5;
-		if (empty($page)) $page = 1; // Display first pagination page
-		$smarty->assign("#objets#", $#objets#_manager->get#Objets#ByPage($#objet3#_id, $page, $rpp));
-		$pagination = new Pagination($page, $#objets#_manager->getMax#Objets#($#objet3#_id), $rpp);
+		$rpp = 5;
+		if (empty($page)) $page = 1; // Display first page
+		$smarty->assign("#objets#", $#objets#_manager->get#Objets#ByPage($page, $rpp));
+		$pagination = new Pagination($page, $#objets#_manager->getMax#Objets#(), $rpp);
 		$smarty->assign("btn_nav", $pagination->getNavigation());
-		//$smarty->assign("#objet3#_id", $#objet3#_id);
-		*/
-		$smarty->assign("#objets#", $#objets#_manager->get#Objets#());
+
+		//$smarty->assign("#objets#", $#objets#_manager->get#Objets#());
 		$smarty->assign("content", "#objets#/list.tpl.html");
 		$smarty->display("main.tpl.html");
 }

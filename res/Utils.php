@@ -29,7 +29,7 @@ class Utils {
      * @param $exclude_fields
      * @return mixed
      */
-    public static function iterationReplace($content, $needles, $fields, $alt_types, $object, $exclude_fields = null) {
+    public static function iterationReplace($content, $needles, $fields, $alt_types, $object, $exclude_fields = null, $exclude_types = null, $exclude_notchecked = false) {
         foreach ($needles as $needle) {
             $lines = array();
             $type_str = array();
@@ -46,12 +46,16 @@ class Utils {
                // $opt2 = self::getInnerSubstring($content, "@alt@", $needle);
             }
             foreach ($fields as $col) {
-                if ($exclude_fields == null || !in_array($col["Field"], $exclude_fields)) {
-                    if ($alt_types != null ) $str = (in_array($col["Type"], $alt_types))?$type_str[$col["Type"]]:$type_str["default"];
-                    else $str = $line;
-                    $lines[] = str_replace(array("#label#", "#Label#", "#field#"),
-                        array($col["Field"], utils::formatVar($col["Field"]), $object."->".$col["Field"]), $str);
-                    // , (strlen($col["Object"]) > 0 )?$col["Object"]:$col["Field"]
+                if ($exclude_notchecked == false || $col["cb"] != 0) { // exclu les champs non cochés
+                    if ($exclude_types == null || !in_array($col["Type"], $exclude_types)) {
+                        if ($exclude_fields == null || !in_array($col["Field"], $exclude_fields)) {
+                            if ($alt_types != null) $str = (in_array($col["Type"], $alt_types)) ? $type_str[$col["Type"]] : $type_str["default"];
+                            else $str = $line;
+                            $lines[] = str_replace(array("#label#", "#Label#", "#field#"),
+                                array($col["Field"], utils::formatVar($col["Field"]), $object . "->" . $col["Field"]), $str);
+                            // , (strlen($col["Object"]) > 0 )?$col["Object"]:$col["Field"]
+                        }
+                    }
                 }
             }
             $content = str_replace($needle.$line.$needle, implode($lines, "\n"), $content);
@@ -90,6 +94,7 @@ class Utils {
         foreach (explode(",", $values)  as $value) {
             $html .= '<p><label>'.$value.'</label>';
             $html .= '<input name="'.$value.'" type="text" size="20">';
+            $html .= '<input name="cb_'.$value.'" type="checkbox" checked="checked">';
             $html .= '</p>';
         }
         return $html;
@@ -177,7 +182,7 @@ class Utils {
         if ($result = mysqli_query($db, "SHOW COLUMNS FROM ". $table)) {
             while ($row = mysqli_fetch_assoc($result)) {
                 $colnames[] = array("Field" => $row['Field'], "Type" => @preg_replace('/\(([0-9]*)\)/', '', $row['Type']),
-                    "Object" => (isset($post[$row['Field']]))?$post[$row['Field']]:"");
+                    "Object" => (isset($post[$row['Field']]))?$post[$row['Field']]:"", "cb" => (isset($post["cb_".$row['Field']]))?1:0);
             }
         }
         return $colnames;

@@ -29,9 +29,17 @@ class #Objet#Manager {
 	/**
 	* Retourne la liste des #objets#
 	*/
-	public function get#Objets#() {
+	public function get#Objets#($offset = null, $count = null) {
 		$#objets# = array();
-		$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id');
+		if (isset($offset) && isset($count)) {
+			$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id DESC LIMIT :offset, :count');
+			$q->bindValue(':offset', $offset, PDO::PARAM_INT);
+			$q->bindValue(':count', $count, PDO::PARAM_INT);
+		}
+		else {
+			$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id');
+		}
+
 		$q->execute();
 		while ($data = $q->fetch(PDO::FETCH_ASSOC)) {
 			$#objets#[] = new #Objet#($data);
@@ -39,76 +47,23 @@ class #Objet#Manager {
 		return $#objets#;
 	}
 	
-	/* public function get#Objets#($isEagerFetch = true) {
-		$#objets# = array();
-		$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY #objet2#_id');
-		$q->execute();
-		while ($data = $q->fetch(PDO::FETCH_ASSOC)) {
-			$#objet# = new #Objet#($data);
-			if ($isEagerFetch) {
-				$#objet2#_manager = new #Objet2#Manager($this->bdd);
-				$#objet#->set#Objet2#($#objet2#_manager->get#Objet2#($#objet#->get#Objet2#Id()));
-				}
-			$#objets#[] = $#objet#;
-		}
-		return $#objets#;
-	} */
-
 	/**
-	* Retourne la liste des #objets# par page
-	*/
-	/* public function get#Objets#ByPage($#objet3#_id, $page_num, $lpp, $isEagerFetch = true) {
-		$#objets# = array();
-		$start = ($page_num-1)*$lpp;
-		if ($#objet3#_id > 0) {
-			$q = $this->bdd->prepare('SELECT * FROM #table# WHERE #objet3#_id = :#objet3#_id ORDER BY id DESC LIMIT :start, :lpp');
-			$q->bindValue(':#objet3#_id', $#objet3#_id, PDO::PARAM_INT);
-			}
-		else {
-			$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id DESC LIMIT :start, :lpp');
-		}
-		$q->bindValue(':start', $start, PDO::PARAM_INT);
-		$q->bindValue(':lpp', $lpp, PDO::PARAM_INT);
-		$q->execute();
-		while ($data = $q->fetch(PDO::FETCH_ASSOC)) {
-			$#objet# = new #Objet#($data);
-			if ($isEagerFetch) {
-				$#objet2#_manager = new #Objet2#Manager($this->bdd);
-				$#objet#->set#Objet2#($#objet2#_manager->get#Objet2#($#objet#->get#Objet2#Id()));
-				}
-			$#objets#[] = $#objet#;
-		}
-		return $#objets#;
-	} */
-	
-	/**
-	 * Retourne une liste des #objets# formatée pour peupler un menu déroulant
+	 * Retourne la liste des #objets# par page
 	 */
-	 public function get#Objets#ForSelect() {
-		$#objets# = array();
-		$q = $this->bdd->prepare('SELECT id, name FROM #table# ORDER BY id');
-		$q->execute();
-		while ($row = $q->fetch(PDO::FETCH_ASSOC)) {
-			$#objets#[$row["id"]] =  $row["name"];
-		}
-		return $#objets#;
-	}
-	
+	 public function get#Objets#ByPage($page_num, $count) {
+		return $this->get#Objets#(($page_num-1)*$count, $count);
+	 }
+
 	/**
 	 * Retourne le nombre max de places
 	 */
-	public function getMax#Objets#($#objet3#_id) {
-		if ($#objet3#_id > 0) {
-			$q = $this->bdd->prepare('SELECT count(1) FROM #table# WHERE #objet3#_id = :#objet3#_id');
-			$q->bindValue(':#objet3#_id', $#objet3#_id, PDO::PARAM_INT);
-			}
-		else {
-			$q = $this->bdd->prepare('SELECT count(1) FROM #objets#');
-		}
+	public function getMax#Objets#() {
+		$q = $this->bdd->prepare('SELECT count(1) FROM #objets#');
 		$q->execute();
 		return intval($q->fetch(PDO::FETCH_COLUMN));
 	}
-	
+
+
 	/**
 	* Efface l'objet #objet# de la bdd
 	* @param #Objet# $#objet#
@@ -134,5 +89,76 @@ class #Objet#Manager {
 		$q->execute();
 		if ($#objet#->getId() == -1) $#objet#->setId($this->bdd->lastInsertId());
 	}
+
+
+	/* ----------- fonctions optionnelles ----------- */
+
+	/**
+	 * Retourne la liste des #objets# avec les objets de type #Objet2# avec EagerFetch
+	 */
+	/* public function get#Objets#($isEagerFetch = false, $offset = null, $count = null) {
+		$#objets# = array();
+		if (isset($offset) && isset($count)) {
+			$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id DESC LIMIT :offset, :count');
+			$q->bindValue(':offset', $offset, PDO::PARAM_INT);
+			$q->bindValue(':count', $count, PDO::PARAM_INT);
+			}
+		else {
+			$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id');
+			}
+		$q->execute();
+		while ($data = $q->fetch(PDO::FETCH_ASSOC)) {
+			$#objet# = new #Objet#($data);
+			if ($isEagerFetch) {
+				$#objet2#_manager = new #Objet2#Manager($this->bdd);
+				$#objet#->set#Objet2#($#objet2#_manager->get#Objet2#($#objet#->get#Objet2#Id()));
+				}
+			$#objets#[] = $#objet#;
+		}
+		return $#objets#;
+	} */
+
+	/**
+	 * Retourne la liste des #objets# par page avec EagerFetch
+	 */
+	/* public function get#Objets#ByPage($page_num, $count, $isEagerFetch = false) {
+		return $this->get#Objets#($isEagerFetch, ($page_num-1)*$count, $count);
+	} */
+
+	/**
+	 * Retourne une liste des #objets# formatée pour peupler un menu déroulant
+	 */
+	/*public function get#Objets#ForSelect() {
+		$#objets# = array();
+		$q = $this->bdd->prepare('SELECT id, name FROM #table# ORDER BY id');
+		$q->execute();
+		while ($row = $q->fetch(PDO::FETCH_ASSOC)) {
+			$#objets#[$row["id"]] =  $row["name"];
+		}
+		return $#objets#;
+	}*/
+
+
+	/**
+	 * Retourne la liste des #objets# par parent
+	 */
+	/*public function get#Objets#ByParent() {
+		$#objets# = array();
+		$q1 = $this->bdd->prepare('SELECT * FROM #table# WHERE parent_id = 0');
+		$q1->execute();
+		while ($data = $q1->fetch(PDO::FETCH_ASSOC)) {
+			$#objet# = new #Objet#($data);
+			$#objets#[] = $#objet#;
+			$q2 = $this->bdd->prepare('SELECT * FROM #table# WHERE parent_id = :parent_id');
+			$q2->bindValue(':parent_id', $#objet#->getId(), PDO::PARAM_INT);
+			$q2->execute();
+			while ($data = $q2->fetch(PDO::FETCH_ASSOC)) {
+				$#objets#[] = new #Objet#($data);
+			}
+		}
+		return  $#objets#;
+	}
+	*/
+
 }
 ?>

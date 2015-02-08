@@ -33,22 +33,22 @@ switch ($action) {
 		break;
 
 	case "save_connection" :
-		$db = utils::getMysqlCnx($_POST["server"], $_POST["user"], $_POST["password"]);
+		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"]);
 		if (!$db->connect_error) {
 			// Enregistre la liste des bases de données
-			utils::saveParams(XML_FILEPATH, array("database" => utils::getRowsFromSql($db, "SHOW DATABASES", utils::getParamFromXml(XML_FILEPATH, "database"))));
+			utils::saveParams(XML_FILEPATH, array("db_base" => utils::getRowsFromSql($db, "SHOW DATABASES", utils::getParamFromXml(XML_FILEPATH, "db_base"))));
 			$db->close();
 			// Enregistre les paramètres du formulaire		
 			utils::saveParams(XML_FILEPATH, $_POST);
-			utils::displayForm(TPL_FILEPATH, XML_FILEPATH, array("project", "connection", "database"), "save_database");
+			utils::displayForm(TPL_FILEPATH, XML_FILEPATH, array("project", "connection", "database"), "save_db_base");
 		}
 		break;
 
-	case "save_database" :
-		$db = utils::getMysqlCnx($_POST["server"], $_POST["user"], $_POST["password"], $_POST["database"]);
+	case "save_db_base" :
+		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"], $_POST["db_base"]);
 		if (!$db->connect_error) {
 			// Enregistre la liste des tables
-			utils::saveParams(XML_FILEPATH, array("table" => utils::getRowsFromSql($db, "SHOW tables FROM " . $_POST["database"], utils::getParamFromXml(XML_FILEPATH, "table"))));
+			utils::saveParams(XML_FILEPATH, array("table" => utils::getRowsFromSql($db, "SHOW tables FROM " . $_POST["db_base"], utils::getParamFromXml(XML_FILEPATH, "table"))));
 			$db->close();
 			utils::saveParams(XML_FILEPATH, $_POST);
 			utils::displayForm(TPL_FILEPATH, XML_FILEPATH, array("project", "connection", "database", "table"), "save_table");
@@ -56,7 +56,7 @@ switch ($action) {
 		break;
 
 	case "save_table" :
-		$db = utils::getMysqlCnx($_POST["server"], $_POST["user"], $_POST["password"], $_POST["database"]);
+		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"], $_POST["db_base"]);
 		if (!$db->connect_error) {
 			// Affiche la liste des champs
 			utils::saveParams(XML_FILEPATH, array("fields" => utils::getRowsFromSql($db, "SHOW columns FROM " . $_POST["table"])));
@@ -70,10 +70,10 @@ switch ($action) {
 
 		$xml = simplexml_load_file(XML_FILEPATH);
 
-		$server 	= $_POST['server'];
-		$user 		= $_POST['user'];
-		$password 	= $_POST['password'];
-		$database 	= $_POST['database'];
+		$db_server 			= $_POST['db_server'];
+		$db_user 			= $_POST['db_user'];
+		$db_password 		= $_POST['db_password'];
+		$db_base 			= $_POST['db_base'];
 
 		$project_name 		= $_POST['project_name'];
 		$project_folder		= utils::slugify($project_name);
@@ -88,7 +88,7 @@ switch ($action) {
 		// Les evntuelles parametres saisies pour les champs sont dans le $_POST
 
 
-		$db = utils::getMysqlCnx($_POST["server"], $_POST["user"], $_POST["password"], $_POST["database"]);
+		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"], $_POST["db_base"]);
 		if (!$db->connect_error) {
 			// Creation du dossier de  base
 			define('OUTPUT_FOLDER', 'out/' . $project_folder);
@@ -112,8 +112,8 @@ switch ($action) {
 
 			$content = file_get_contents($tplFilePath); // lit le template
 
-			$search  = array("#server#", "#user#", "#password#", '#database#');
-			$replace = array($server, $user, $password, $database,);
+			$search  = array("#db_server#", "#db_user#", "#db_password#", '#db_base#');
+			$replace = array($db_server, $db_user, $db_password, $db_base,);
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			// --------------------------- Génération de la classe ---------------------------
@@ -184,7 +184,7 @@ switch ($action) {
 			$ouputFilePath = OUTPUT_TPL_PATH."/".$objets."/"."list.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"));
+			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
 
 			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#" );
 			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets) );
