@@ -16,12 +16,8 @@ class Logger {
 	}
 
 	// Notification de l'utilisateur
-	public function notification($message, $type=self::INFO) {
-		if ($type == "erreur" || $type == "ERREUR" || $type == "ERROR") {
-			$type = self::ERROR;
-			}
-		$this->session->setValue($type, $message);
-		$this->smarty->assign($type, $message);
+	public function notification($message, $type="success") {
+		$this->session->setValue("alert", array("type" => $type, "message" => $message));
 	}
 	
 	public function debug($contexte, $message) {

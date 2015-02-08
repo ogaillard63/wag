@@ -17,13 +17,13 @@
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">liens</table>
-		<objet attribut="input">lien</objet>
-		<objets attribut="input">liens</objets>
+		<table attribut="select">tasks</table>
+		<objet attribut="input">task</objet>
+		<objets attribut="input">tasks</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,rub_id,titre,url,descriptif,etat</fields>
+		<fields attribut="field">id,date,content</fields>
 		<objet2 attribut="input"/>
 		<objet3 attribut="input"/>
 	</section>

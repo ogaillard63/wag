@@ -68,11 +68,17 @@ if(isset($_GET['cnt'])) {
 $translate = new Translator($_SESSION['filePathLang']); 
 
 // Gestion des notifications
-$types_msg = array("DEBUG", "INFO", "ERROR");
-foreach ($types_msg as $type) {
-	if ($msg = $session->getValue($type)) {
-		$smarty->assign(strtolower($type), $msg);
-		$session->unsetKey($type);
+if ($alert = $session->getValue("alert")) {
+	$smarty->assign("alert", $alert);
+	$session->unsetKey("alert");
+}
+
+// Génération du menu dynamique
+foreach (glob(PATH_APP. "/*.php") as $filename) {
+	$fi = pathinfo($filename);
+	if ($fi['filename'] != "index") {
+		$smarty->append("choices", array("link" => $fi['basename'],"title" => $fi['filename']));
 	}
 }
+
 ?>

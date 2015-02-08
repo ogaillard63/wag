@@ -51,37 +51,7 @@ class Utils {
 	    //return $image_p;
 	}
 	
-	/**
-	 * Recherche la durée d'une vidéo
-	 *  @param $videofile le chemin absolu de la vidéo
-	 *  $return array 1->largeur / 2->hauteur
-	 **/
-	public static function getVideoDuration($videofile) {
-		if (file_exists ( $videofile )) {  
-			$avconv_output = shell_exec("avconv -i \"$videofile\" 2>&1");
-			if (preg_match('/.*Duration: ([0-9:]+).*/', $avconv_output, $matches)) {
-				return $matches[1];
-			}
-		}
-		return 0;
-	}
-		
-	/**
-	 * Recherche la taille d'une vidéo
-	 *  @param $videofile le chemin absolu de la vidéo
-	 **/
-	public static function getVideoSize($videofile) {
-		$duration = array();
-		if (file_exists ( $videofile )) {  
-			$avconv_output = shell_exec("avconv -i \"$videofile\" 2>&1");
-			if (preg_match('/Video:.* ([0-9]+)x([0-9]+)/', $avconv_output, $matches)) {
-				return $matches;
-			}
-		}
-		return 0;
-	}
-	
-	
+
 	// Conversion date/time
 	/**
 	 * Conversion de datetime (sans seconde) au format SQL
@@ -166,7 +136,8 @@ class Utils {
 	
 		return preg_replace($chars, array_keys($chars), $s);
 	}
-	 
+
+
 	// Fichiers et dossiers
 	/**
 	 * Supprime récursivement ou non tous les fichiers d'un dossier sans suivre les liens symboliques
@@ -185,24 +156,7 @@ class Utils {
 		rmdir($path);
 	}
 	
-	/**
-	 * copyDir : Copie récursive
-	 */
-	 public static function copyDir($dir2copy, $dir_paste) {
-		if (is_dir($dir2copy)) {
-			if ($dh = opendir($dir2copy)) {
-				while (($file = readdir($dh)) !== false) {
-					if (!is_dir($dir_paste))
-					mkdir($dir_paste, 0777);
-					if (is_dir($dir2copy . $file) && $file != '..' && $file != '.')
-					self::copyDir($dir2copy . $file . '/', $dir_paste . $file . '/');
-					elseif ($file != '..' && $file != '.')
-					copy($dir2copy . $file, $dir_paste . $file);
-				}
-				closedir($dh);
-			}
-		}
-	}
+
 	
 	// copies files and non-empty directories
 	 public static function rcopy($src, $dst) {

@@ -34,22 +34,23 @@
     <script src="{$tpl}/assets/js/application.js"></script>
     </head>
     <body class="animated fadeIn">
-    <section id="container">
-	{include file="header.tpl.html"}
-        <!--sidebar start-->
-		{include file="sidebar_left.tpl.html"}
-         <!--sidebar end-->
-         <!--main content start-->
-         <section class="main-content-wrapper">
-            <section id="main-content">
-            {include file="breadcrumbs.tpl.html"}   
-            {include file="$content"}
-            </section>
-         </section>
-         <!--main content end-->
-         <!--sidebar right start-->
-		{include file="sidebar_right.tpl.html"}
-        <!--sidebar right end-->
-    </section>
+        <section id="container">
+        {include file="header.tpl.html"}
+            <!--sidebar start-->
+            {include file="sidebar_left.tpl.html"}
+             <!--sidebar end-->
+             <!--main content start-->
+             <section class="main-content-wrapper">
+                <section id="main-content">
+                {include file="breadcrumbs.tpl.html"}
+                {include file="$content"}
+                </section>
+             </section>
+             <!--main content end-->
+            <!--alert message-->
+            {if isset($alert)}<div class="alert alert-{$alert.type} alert-dismissable autoclose">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {$alert.message}</div>{/if}
+        </section>
     </body>
 </html>

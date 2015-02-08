@@ -1,0 +1,8 @@
+﻿#general
+edit = modifier
+delete = effacer
+cancel = annuler
+save = enregistrer
+actions = actions
+
+# ------------------------- #
