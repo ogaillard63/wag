@@ -9,24 +9,45 @@
 class Utils {
 
 
-    // Renvoi la chaine comprise entre $from et $to
+    /*
+     *  Renvoi la chaine comprise entre $from et $to
+     */
     public static function getInnerSubstring($str, $from, $to) {
         $sub = substr($str, strpos($str,$from)+strlen($from), strlen($str));
         return substr($sub, 0, strpos($sub,$to));
     }
-// Effectue le remplacement des iterations de ligne
+
+    /**
+     * Effectue le remplacement des iterations de ligne
+     * > $alt_types ! null on doit trouver la balise @default@ et toutes les balises contenu dans $alt_types
+     *
+     *
+     * @param $content
+     * @param $needles
+     * @param $fields
+     * @param $alt_types
+     * @param $exclude_fields
+     * @return mixed
+     */
     public static function iterationReplace($content, $needles, $fields, $alt_types, $object, $exclude_fields = null) {
         foreach ($needles as $needle) {
             $lines = array();
+            $type_str = array();
+            $line = self::getInnerSubstring($content, $needle, $needle);
 
             if ($alt_types != null) {
-                $opt1 = self::getInnerSubstring($content, $needle, "@alt@");
-                $opt2 = self::getInnerSubstring($content, "@alt@", $needle);
+                $alt_types[] = "default";
+                //$type_str["default"] = self::getInnerSubstring($line, "@default@", "@default@");
+                foreach ($alt_types as $type) {
+                    $type_str[$type] = self::getInnerSubstring($line, "@".$type."@", "@".$type."@");
+                }
+
+               // $opt1 = self::getInnerSubstring($content, $needle, "@alt@");
+               // $opt2 = self::getInnerSubstring($content, "@alt@", $needle);
             }
-            $line = self::getInnerSubstring($content, $needle, $needle);
             foreach ($fields as $col) {
                 if ($exclude_fields == null || !in_array($col["Field"], $exclude_fields)) {
-                    if ($alt_types != null ) $str = (in_array($col["Type"], $alt_types))?$opt2:$opt1;
+                    if ($alt_types != null ) $str = (in_array($col["Type"], $alt_types))?$type_str[$col["Type"]]:$type_str["default"];
                     else $str = $line;
                     $lines[] = str_replace(array("#label#", "#Label#", "#field#"),
                         array($col["Field"], utils::formatVar($col["Field"]), $object."->".$col["Field"]), $str);
@@ -155,7 +176,7 @@ class Utils {
         $colnames=array();
         if ($result = mysqli_query($db, "SHOW COLUMNS FROM ". $table)) {
             while ($row = mysqli_fetch_assoc($result)) {
-                $colnames[] = array("Field" => $row['Field'], "Type" => @preg_replace('/(/([0-9]*/))/', '', $row['Type']),
+                $colnames[] = array("Field" => $row['Field'], "Type" => @preg_replace('/\(([0-9]*)\)/', '', $row['Type']),
                     "Object" => (isset($post[$row['Field']]))?$post[$row['Field']]:"");
             }
         }

@@ -130,7 +130,7 @@ class #Objet#Manager {
 			$q = $this->bdd->prepare('UPDATE #table# SET #liste_vars# WHERE id = :id');
 			$q->bindValue(':id', $#objet#->getId(), PDO::PARAM_INT);
 		}
-@binds@		$q->bindValue(':#label#', $#objet#->get#Label#(), PDO::PARAM_STR);@alt@		$q->bindValue(':#label#', $#objet#->get#Label#(), PDO::PARAM_INT);@binds@	
+@binds@@default@		$q->bindValue(':#label#', $#objet#->get#Label#(), PDO::PARAM_STR);@default@@int@		$q->bindValue(':#label#', $#objet#->get#Label#(), PDO::PARAM_INT);@int@@binds@
 		$q->execute();
 		if ($#objet#->getId() == -1) $#objet#->setId($this->bdd->lastInsertId());
 	}

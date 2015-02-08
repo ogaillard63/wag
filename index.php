@@ -171,7 +171,7 @@ switch ($action) {
 			$ouputFilePath = OUTPUT_TPL_PATH."/".$objets."/"."edit.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@items@"), $cols, array("text"), $objet, array("id"));
+			$content = utils::iterationReplace($content, array("@items@"), $cols, array("text", "date"), $objet, array("id"));
 
 			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#");
 			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets));
@@ -184,7 +184,7 @@ switch ($action) {
 			$ouputFilePath = OUTPUT_TPL_PATH."/".$objets."/"."list.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, null, $objet, array("id"));
+			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"));
 
 			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#" );
 			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets) );

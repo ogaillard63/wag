@@ -30,18 +30,18 @@ class #Objet# {
 
 	/* --- Getters et Setters --- */
 
-@getters_setters@	// #label#
+@getters_setters@@default@	// #label#
 	public function set#Label#($#label#) {
 		$this->#label# = $#label#;
 	}
 	public function get#Label#() {
 		return $this->#label#;
-	}@alt@	// #label#
+	}@default@@int@	// #label#
 	public function set#Label#($#label#) {
 		$this->#label# = (integer)$#label#;
 	}
 	public function get#Label#() {
 		return $this->#label#;
-	}@getters_setters@
+	}@int@@getters_setters@
 }
 ?>

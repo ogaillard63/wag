@@ -92,6 +92,10 @@ var app = function() {
 //Load global functions
 $(document).ready(function() {
     app.init();
+    // init datepicker
+    $('.datepicker').datepicker({
+        language: "fr"
+    });
     // fermeture auto des alertes
     window.setTimeout(function() { $(".autoclose").alert('close'); }, 10000);
 

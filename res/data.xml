@@ -23,7 +23,7 @@
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,date,content</fields>
+		<fields attribut="field">id,creation_date,content</fields>
 		<objet2 attribut="input"/>
 		<objet3 attribut="input"/>
 	</section>
