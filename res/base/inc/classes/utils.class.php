@@ -16,7 +16,16 @@ class Utils {
 		print_r($tab);
 		echo "</pre>";
 	}
-    
+
+	/**
+	 * Format string as a slug
+	 * @param $text
+	 * @return string
+	 */
+	public static function slugify($str) {
+		$text = iconv('utf-8', 'us-ascii//TRANSLIT', $str);
+		return strtolower(preg_replace('/[^A-Za-z0-9-]+/', '_', $str));
+	}
 
 	// Traitement des images
 	/**

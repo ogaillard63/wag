@@ -19,7 +19,7 @@ define('TPL_FOLDER', RES_PATH.'/tpl');
 define('XML_FILEPATH', RES_PATH.'/data.xml');
 define('TPL_FILEPATH', TPL_FOLDER.'/form.tpl.html');
 
-require(RES_PATH.'/Utils.php');
+require(RES_PATH . '/utils.php');
 $utils = new Utils(); // fonctions utilitaires
 
 // Récupération de l'action
@@ -98,7 +98,8 @@ switch ($action) {
 			define('OUTPUT_CLASSES_PATH', OUTPUT_PATH.'/inc/classes');
 			define('OUTPUT_TPL_PATH', OUTPUT_PATH.'/tpl');
 
-			if (!is_dir(OUTPUT_FOLDER)) {
+			if (!is_dir(OUTPUT_PATH)) {
+				mkdir(OUTPUT_PATH, 0777, true);
 				utils::copyDir(BASE_PATH.'/', OUTPUT_PATH.'/');
 			}
 

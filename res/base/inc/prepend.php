@@ -12,13 +12,13 @@ error_reporting(E_ALL);
 setlocale(LC_ALL, 'fr_FR');
 date_default_timezone_set('Europe/Paris');
 
-define('DS', DIRECTORY_SEPARATOR);
-define('PATH_APP', 			realpath(dirname (__FILE__).DS.'..'));
-define('PATH_INC', 			PATH_APP.DS.'inc');
-define('PATH_LANG',			PATH_APP.DS.'lang');
-define('PATH_PROPERTIES', 	PATH_INC.DS.'properties');
-define('PATH_CLASSES', 		PATH_INC.DS.'classes');
-define('PATH_SMARTY', 		PATH_INC.DS.'../../../vendor/smarty');
+define('DS', '/');
+define('PATH_APP', 			realpath(dirname (__FILE__).'/..'));
+define('PATH_INC', 			PATH_APP.'/inc');
+define('PATH_LANG',			PATH_APP.'/lang');
+define('PATH_PROPERTIES', 	PATH_INC.'/properties');
+define('PATH_CLASSES', 		PATH_INC.'/classes');
+define('PATH_SMARTY', 		PATH_APP.'/../../vendor/smarty');
 
 // autoloader de classes
 function autoloader($class) {
