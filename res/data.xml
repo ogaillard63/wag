@@ -2,28 +2,28 @@
 <webapp>
 	<section type="project">
 		<title>Project</title>
-		<project_name attribut="input">Dinero</project_name>
+		<project_name attribut="input">Travel Planner</project_name>
 		<project_author attribut="input">Olivier Gaillard</project_author>
 	</section>
 	<section type="connection">
 		<title>Connection</title>
 		<db_server attribut="input">localhost</db_server>
-		<db_user attribut="input">dinero</db_user>
-		<db_password attribut="input">dinero</db_password>
+		<db_user attribut="input">trip333</db_user>
+		<db_password attribut="input">trip333</db_password>
 	</section>
 	<section type="database">
 		<title>Database</title>
-		<db_base attribut="select">dinero</db_base>
+		<db_base attribut="select">trip333</db_base>
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">users</table>
-		<objet attribut="input">user</objet>
-		<objets attribut="input">users</objets>
+		<table attribut="select">galleries</table>
+		<objet attribut="input">gallery</objet>
+		<objets attribut="input">galleries</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,username,firstname,login,email,password,profil,expiration_date,last_cnx,param1</fields>
+		<fields attribut="field">id,type,title,description</fields>
 
 		<objet2 attribut="input"/>
 		<objet3 attribut="input"/>
