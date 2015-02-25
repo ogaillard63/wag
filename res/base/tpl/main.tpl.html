@@ -30,8 +30,9 @@
     <script src="{$tpl}/assets/js/html5shiv.js"></script>
     <script src="{$tpl}/assets/js/respond.min.js"></script>
     <![endif]-->
-    <!--Global JS-->
+    <!--JQuery JS-->
     <script src="{$tpl}/assets/js/jquery-1.10.2.min.js"></script>
+    <script src="{$tpl}/assets/js/jquery.cookie.js"></script>
     <!-- Bootstrap JS -->
     <script src="{$tpl}/assets/bootstrap/js/bootstrap.min.js"></script>
     <!-- Datepicker JS -->
@@ -40,14 +41,14 @@
     <!-- Custom JS -->
     <script src="{$tpl}/assets/js/application.js"></script>
 </head>
-<body class="animated fadeIn">
+<body>
 <section id="container">
     {include file="header.tpl.html"}
     <!--sidebar start-->
     {include file="sidebar_left.tpl.html"}
     <!--sidebar end-->
     <!--main content start-->
-    <section class="main-content-wrapper">
+    <section class="main-content-wrapper main-content-toggle-left">
         <section id="main-content">
             {include file="breadcrumbs.tpl.html"}
             {include file="$content"}
