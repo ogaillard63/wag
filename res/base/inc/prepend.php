@@ -1,9 +1,8 @@
 <?php
 /**
- * @project		WebApp Base
- *
- * @author		Olivier Gaillard <ogaillard63@gmail.com>
- * @version		1.0
+ * @project		WebApp Generator
+ * @author		Olivier Gaillard
+ * @version		1.0 du 04/06/2012
  * @desc	   	Initialisation des ressources
  */
 ini_set('display_errors', 1);
