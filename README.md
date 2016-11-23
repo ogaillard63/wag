@@ -7,5 +7,9 @@
 des catégories. La table doit comporter un champ parent_id.
 
 
-# todo
+# Todo
++ Normalisaition des id en uid
 + Debug du problème avec les objets ayant un underscore dans le nom
++ Gestion des uid portant un nom different
++ Ajout d'un moteur de recherche
+
