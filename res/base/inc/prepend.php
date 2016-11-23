@@ -3,7 +3,7 @@
  * @project		WebApp Base
  *
  * @author		Olivier Gaillard <ogaillard63@gmail.com>
- * @version		1.0 du 13/03/2014
+ * @version		1.0
  * @desc	   	Initialisation des ressources
  */
 ini_set('display_errors', 1);

@@ -1,9 +1,9 @@
 <?php
 /**
- * @project		Affichage dynamique
+ * @project		WebApp Base
  *
- * @author		Olivier Gaillard <olivier.gaillard@centrefrance.com>
- * @version		1.0 du 04/06/2012
+ * @author		Olivier Gaillard <ogaillard63@gmail.com>
+ * @version		1.0
  * @desc	   	Libération des ressources
  */
 
