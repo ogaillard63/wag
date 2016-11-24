@@ -235,7 +235,7 @@ class Utils {
     }
 
 // Debug array
-    public static function  print_table($array) {
+    public static function  debugArray($array) {
         echo"<pre>";
         print_r($array);
         echo"</pre>";

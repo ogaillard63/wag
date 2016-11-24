@@ -15,7 +15,8 @@ $id				= Utils::get_input('id','both');
 $page			= Utils::get_input('page','both');
 @vars@$#label#			= Utils::get_input('#label#','post');@vars@
 
-$#objets#_manager = new #Objet#Manager($bdd);
+$#objet#_manager = new #Objet#Manager($bdd);
+// $#objet2#_manager = new #Objet2#Manager($bdd);
 
 switch($action) {
 	
@@ -26,21 +27,21 @@ switch($action) {
 		break;
 	
 	case "edit" :
-		$smarty->assign("#objet#", $#objets#_manager->get#Objet#($id));
+		$smarty->assign("#objet#", $#objet#_manager->get#Objet#($id));
 		$smarty->assign("content","#objets#/edit.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
 
 	case "save" :
 		$data = array(#liste_sql_fields#);
-		$#objets#_manager->save#Objet#(new #Objet#($data));
+		$#objet#_manager->save#Objet#(new #Objet#($data));
 		$log->notification($translate->__('the_#objet#_has_been_saved'));
 		Utils::redirection("#objets#.php");
 		break;
 
 	case "delete" :
-		$#objet# = $#objets#_manager->get#Objet#($id);
-		if ($#objets#_manager->delete#Objet#($#objet#)) {
+		$#objet# = $#objet#_manager->get#Objet#($id);
+		if ($#objet#_manager->delete#Objet#($#objet#)) {
 			$log->notification($translate->__('the_#objet#_has_been_deleted'));
 		}
 		Utils::redirection("#objets#.php");
@@ -50,11 +51,11 @@ switch($action) {
 		$smarty->assign("titre", $translate->__('list_of_#objets#'));
 		$rpp = 5;
 		if (empty($page)) $page = 1; // Display first page
-		$smarty->assign("#objets#", $#objets#_manager->get#Objets#ByPage($page, $rpp));
-		$pagination = new Pagination($page, $#objets#_manager->getMax#Objets#(), $rpp);
+		$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp));
+		$pagination = new Pagination($page, $#objet#_manager->getMax#Objets#(), $rpp);
 		$smarty->assign("btn_nav", $pagination->getNavigation());
 
-		//$smarty->assign("#objets#", $#objets#_manager->get#Objets#());
+		//$smarty->assign("#objets#", $#objet#_manager->get#Objets#());
 		$smarty->assign("content", "#objets#/list.tpl.html");
 		$smarty->display("main.tpl.html");
 }

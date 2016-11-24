@@ -126,7 +126,7 @@ class #Objet#Manager {
 	} */
 
 	/**
-	 * Retourne une liste des #objets# formatée pour peupler un menu déroulant
+	 * Retourne une liste des #objets# formatés pour peupler un menu déroulant
 	 */
 	/*public function get#Objets#ForSelect() {
 		$#objets# = array();
@@ -137,6 +137,12 @@ class #Objet#Manager {
 		}
 		return $#objets#;
 	}*/
+
+
+
+
+
+
 
 
 	/**

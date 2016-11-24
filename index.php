@@ -85,7 +85,13 @@ switch ($action) {
 		$objet2 			= $_POST['objet2'];
 		$objet3 			= $_POST['objet3'];
 
-		// Les evntuelles parametres saisies pour les champs sont dans le $_POST
+		// Les paramètres éventuels saisies pour les champs sont dans le $_POST
+
+
+
+
+
+
 
 
 		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"], $_POST["db_base"]);
@@ -105,6 +111,8 @@ switch ($action) {
 
 
 			$cols = utils::getFields($db, $table, $_POST);
+
+			//utils::debugArray($cols); die();
 
 			// --------------------------- > Fichier de properties ---------------------------
 			echo "> Fichier : <strong>properties.ini</strong><br/>";
