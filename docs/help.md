@@ -3,7 +3,7 @@
 ++ Cas des champs liés par un id à une autre table ++
 Ex :  section_id vers section->name
 
-Dans la saisie des champs de la table dans Objet 2 saisir le nom du champ externe (ex : section)
+Objet 2 dans table permet de saisir le nom du champ externe (ex : section)
 
 > Affichage
 1 - Utiliser les fonctions optionnelles en remplacement des fonctions classiques

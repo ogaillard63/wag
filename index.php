@@ -88,12 +88,6 @@ switch ($action) {
 		// Les paramètres éventuels saisies pour les champs sont dans le $_POST
 
 
-
-
-
-
-
-
 		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"], $_POST["db_base"]);
 		if (!$db->connect_error) {
 			// Creation du dossier de  base
@@ -137,6 +131,9 @@ switch ($action) {
 
 			$search  = array("#project_name#", "#project_author#", "#date#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
 			$replace = array($project_name, $project_author, date("d/m/Y"), $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+
+			//utils::debugArray($replace);
+
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération de la classe Manager --------------------------- */
@@ -168,8 +165,8 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@vars@"), $cols, null, $objet, array("id"));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", "#liste_sql_fields#", '#objet3#' );
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(", ", $fields), $objet3);
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", "#liste_sql_fields#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(", ", $fields), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template edit --------------------------- */
@@ -182,8 +179,8 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@items@"), $cols, array("text", "date"), $objet, array("id"));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#");
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template list --------------------------- */
@@ -195,8 +192,8 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#" );
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets) );
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Ajout des traductions --------------------------- */
@@ -212,14 +209,14 @@ switch ($action) {
 				if ($col["Field"] != "id") $data .= $col["Field"]." = ".$col["Field"]."\n";
 			}
 
-			$data .= "list_of_".$objets." = list_of_".$objets."\n";
-			$data .= "add_a_".$objet." = add_a_".$objet."\n";
-			$data .= "delete_a_".$objet." = delete_a_".$objet."\n";
-			$data .= "no_".$objet." = no_".$objet."\n";
-			$data .= "edit_a_".$objet." = edit_a_".$objet."\n";
-			$data .= "the_".$objet."_has_been_saved = the_".$objet."_has_been_saved.\n";
-			$data .= "the_".$objet."_has_been_deleted = the_".$objet."_has_been_deleted.\n";
-			$data .= "do_you_really_want_to_delete_this_".$objet." = do_you_really_want_to_delete_this_".$objet."\n";
+			$data .= "list_of_".$objets." = liste des ".$objets."\n";
+			$data .= "add_a_".$objet." = ajouter un ".$objet."\n";
+			$data .= "delete_a_".$objet." = effacer un ".$objet."\n";
+			$data .= "no_".$objet." = aucun ".$objet."\n";
+			$data .= "edit_a_".$objet." = modifier un ".$objet."\n";
+			$data .= "the_".$objet."_has_been_saved = le ".$objet." a été enregistré.\n";
+			$data .= "the_".$objet."_has_been_deleted = le ".$objet." a été effacé.\n";
+			$data .= "do_you_really_want_to_delete_this_".$objet." = voulez-vous vraiment effacer ce ".$objet."\n";
 
 			file_put_contents($langFilePath, $content . $data);
 

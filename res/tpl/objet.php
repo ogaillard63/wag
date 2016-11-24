@@ -22,12 +22,14 @@ switch($action) {
 	
 	case "add" :
 		$smarty->assign("#objet#", new #Objet#(array("id" => -1)));
+		//$smarty->assign("#objet2#s", $#objet2#_manager->get#Objet2#sForSelect());
 		$smarty->assign("content", "#objets#/edit.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
 	
 	case "edit" :
 		$smarty->assign("#objet#", $#objet#_manager->get#Objet#($id));
+		//$smarty->assign("#objet2#s", $#objet2#_manager->get#Objet2#sForSelect());
 		$smarty->assign("content","#objets#/edit.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
@@ -52,10 +54,10 @@ switch($action) {
 		$rpp = 5;
 		if (empty($page)) $page = 1; // Display first page
 		$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp));
+		//$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp, true));
 		$pagination = new Pagination($page, $#objet#_manager->getMax#Objets#(), $rpp);
 		$smarty->assign("btn_nav", $pagination->getNavigation());
 
-		//$smarty->assign("#objets#", $#objet#_manager->get#Objets#());
 		$smarty->assign("content", "#objets#/list.tpl.html");
 		$smarty->display("main.tpl.html");
 }

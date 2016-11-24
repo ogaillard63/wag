@@ -46,13 +46,41 @@ class #Objet#Manager {
 		}
 		return $#objets#;
 	}
-	
+
+	/* public function get#Objets#($offset = null, $count = null, $isEagerFetch = false) {
+			$#objets# = array();
+			if (isset($offset) && isset($count)) {
+				$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id DESC LIMIT :offset, :count');
+				$q->bindValue(':offset', $offset, PDO::PARAM_INT);
+				$q->bindValue(':count', $count, PDO::PARAM_INT);
+				}
+			else {
+				$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id');
+				}
+			$q->execute();
+			while ($data = $q->fetch(PDO::FETCH_ASSOC)) {
+				$#objet# = new #Objet#($data);
+				if ($isEagerFetch) {
+					$#objet2#_manager = new #Objet2#Manager($this->bdd);
+					$#objet#->set#Objet2#($#objet2#_manager->get#Objet2#($#objet#->get#Objet2#Id()));
+					}
+				$#objets#[] = $#objet#;
+			}
+			return $#objets#;
+		} */
+
+
 	/**
 	 * Retourne la liste des #objets# par page
 	 */
 	 public function get#Objets#ByPage($page_num, $count) {
 		return $this->get#Objets#(($page_num-1)*$count, $count);
 	 }
+
+	/* public function get#Objets#ByPage($page_num, $count, $isEagerFetch = false) {
+		return $this->get#Objets#(($page_num-1)*$count, $count, $isEagerFetch);
+	} */
+
 
 	/**
 	 * Retourne le nombre max de places
@@ -94,38 +122,6 @@ class #Objet#Manager {
 	/* ----------- fonctions optionnelles ----------- */
 
 	/**
-	 * Retourne la liste des #objets# avec les objets de type #Objet2# avec EagerFetch
-	 */
-	/* public function get#Objets#($isEagerFetch = false, $offset = null, $count = null) {
-		$#objets# = array();
-		if (isset($offset) && isset($count)) {
-			$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id DESC LIMIT :offset, :count');
-			$q->bindValue(':offset', $offset, PDO::PARAM_INT);
-			$q->bindValue(':count', $count, PDO::PARAM_INT);
-			}
-		else {
-			$q = $this->bdd->prepare('SELECT * FROM #table# ORDER BY id');
-			}
-		$q->execute();
-		while ($data = $q->fetch(PDO::FETCH_ASSOC)) {
-			$#objet# = new #Objet#($data);
-			if ($isEagerFetch) {
-				$#objet2#_manager = new #Objet2#Manager($this->bdd);
-				$#objet#->set#Objet2#($#objet2#_manager->get#Objet2#($#objet#->get#Objet2#Id()));
-				}
-			$#objets#[] = $#objet#;
-		}
-		return $#objets#;
-	} */
-
-	/**
-	 * Retourne la liste des #objets# par page avec EagerFetch
-	 */
-	/* public function get#Objets#ByPage($page_num, $count, $isEagerFetch = false) {
-		return $this->get#Objets#($isEagerFetch, ($page_num-1)*$count, $count);
-	} */
-
-	/**
 	 * Retourne une liste des #objets# formatés pour peupler un menu déroulant
 	 */
 	/*public function get#Objets#ForSelect() {
@@ -137,13 +133,6 @@ class #Objet#Manager {
 		}
 		return $#objets#;
 	}*/
-
-
-
-
-
-
-
 
 	/**
 	 * Retourne la liste des #objets# par parent
