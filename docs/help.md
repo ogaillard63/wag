@@ -10,6 +10,13 @@ Dans la saisie des champs de la table dans Objet 2 saisir le nom du champ extern
 
 
 > Modification
+
+
+<div class="form-group">
+    <label>{#section#|ucfirst}</label>
+    {if isset($item->section_id)}{html_options name=section_id options=$sections selected=$item->section_id class="form-control"}{else}{html_options name=section_id options=$sections class="form-control"}{/if}
+</div>
+
 Dans 
 
 1 - Generation d'une fonction pour peupler un menu déroulant
