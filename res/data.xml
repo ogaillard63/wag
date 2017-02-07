@@ -17,13 +17,13 @@
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">items</table>
-		<objet attribut="input">item</objet>
-		<objets attribut="input">items</objets>
+		<table attribut="select">ctypes</table>
+		<objet attribut="input">ctype</objet>
+		<objets attribut="input">ctypes</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,section_id,title,link,info_link,raw_order</fields>
+		<fields attribut="field">id,name</fields>
 
 		<objet2 attribut="input"/>
 		<objet3 attribut="input"/>
