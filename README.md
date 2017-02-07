@@ -14,6 +14,8 @@ des catégories. La table doit comporter un champ parent_id.
 + Gestion des uid portant un nom different
 + Ajout d'un moteur de recherche
 
-
+# Idées
+Generer des versions de codes avec la gestion d'un "objet lié" plutot que du code commenté
+ou simplement en fonction de la présence ou d'un "objet lié"
 
 
