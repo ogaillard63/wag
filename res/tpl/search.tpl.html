@@ -5,14 +5,19 @@
 				<h3 class="panel-title">{#search#|ucfirst}</h3>
 			</div>
 			<div class="panel-body">
-				<form role="form" name="form_param" method="post" action="#objets#.php" class="form-inline">
-					<input class="form-control" type="hidden" name="action" value="search_results"/>
-					<input class="form-control" type="text" name="query" value="{if not empty($query)}{$query}{/if}" />
-					<button type="submit" class="btn btn-primary">{#search#|ucfirst}</button>
+				<form role="form" name="form_param" method="post" action="#objets#.php" class="search_form">
+					<div class="input-group">
+						<input class="form-control" type="hidden" name="action" value="search_results" />
+						<input class="form-control" type="text" name="query" value="{if not empty($query)}{$query}{/if}" />
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-primary">{#search#|ucfirst}</button>
+						</span>
+					</div>
 				</form>
 			</div>
 		</div>
-		{if not empty($#objets#)}<div class="panel panel-default">
+		{if not empty($#objets#)}
+		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{#search_results#|ucfirst}</h3>
 				<div class="actions pull-right">
@@ -22,29 +27,30 @@
 			</div>
 			<div class="panel-body">
 				<table class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<!--<th>{##objet2##|ucfirst}</th>-->
-@headers@@default@						<th>{##label##|ucfirst}</th>@default@@date@						<th>{##label##|ucfirst}</th>@date@@headers@
-						<th colspan="2">{#actions#|ucfirst}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{foreach from=$#objets# item=#objet#}
-					<tr>
-						<!--<td align="left">{$#objet#->#objet2#->name}</td>-->
-@fields@@default@						<td align="left">{$#field#|replace:"{$query}":"<strong>{$query}</strong>"}</td>@default@@date@						<td align="left">{$#field#|date_format:"%d/%m/%Y"}</td>@date@@fields@
-						<td width="1%" align="center" nowrap="nowrap"><a class="btn btn-sm btn-success" href="#objets#.php?action=edit&id={$#objet#->id}" title="{#edit#|ucfirst}">{#edit#|ucfirst}</a></td>
-						<td width="1%" align="center" nowrap="nowrap"><a class="btn btn-sm btn-danger" href="#objets#.php?action=delete&id={$#objet#->id}" title="{#delete#|ucfirst}" onclick="return confirm('{#do_you_really_want_to_delete_this_#objet##|ucfirst} ?')">{#delete#|ucfirst}</a></td>
-					</tr>
-					{/foreach}
-				</tbody>
-			</table>
-			<ul class="pagination pull-left">
-				{if not empty($btn_nav)} {foreach from=$btn_nav item=btn}
-				<li{if $btn.active} class="active" {/if}><a href="#objets#.php?{$btn.link}">{$btn.label}</a></li>
-					{/foreach}{/if}
-			</ul>
+					<thead>
+						<tr>
+							<!--<th>{##objet2##|ucfirst}</th>-->
+							@headers@@default@
+							<th>{##label##|ucfirst}</th>@default@@date@
+							<th>{##label##|ucfirst}</th>@date@@headers@
+						</tr>
+					</thead>
+					<tbody>
+						{foreach from=$#objets# item=#objet#}
+						<tr>
+							<!--<td align="left">{$#objet#->#objet2#->name}</td>-->
+							@fields@@default@
+							<td align="left">{$#field#|replace:"{$query}":"<strong>{$query}</strong>"}</td>@default@@date@
+							<td align="left">{$#field#|date_format:"%d/%m/%Y"}</td>@date@@fields@
+						</tr>
+						{/foreach}
+					</tbody>
+				</table>
+				<ul class="pagination pull-left">
+					{if not empty($btn_nav)} {foreach from=$btn_nav item=btn}
+					<li{if $btn.active} class="active" {/if}><a href="#objets#.php?{$btn.link}">{$btn.label}</a></li>
+						{/foreach}{/if}
+				</ul>
 			</div>
 		</div>{/if}
 	</div>
