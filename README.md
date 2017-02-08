@@ -6,16 +6,28 @@
 - La méthode get#Objets#ByParent permet d'afficher une liste de catégories ou un menu déroulant en respectant la hiérarchie.
 des catégories. La table doit comporter un champ parent_id.
 
+- la table de l'objet lié doit avoir un champ name
+
 
 # Todo
-+ Pluriels des Managers
-+ Normalisaition des id en uid (pas sur que ce soit utile)
++ Normalisaition des id en uid
 + Debug du problème avec les objets ayant un underscore dans le nom
-+ Gestion des uid portant un nom different
 + Ajout d'un moteur de recherche
++ Gestion des erreurs liés aux contraintes d'intégritées
++ Ajout de clés etrangères sur les tables
+
+ALTER TABLE `articles`
+	ADD CONSTRAINT `FK_articles_types` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`);
+
 
 # Idées
-Generer des versions de codes avec la gestion d'un "objet lié" plutot que du code commenté
-ou simplement en fonction de la présence ou d'un "objet lié"
+Generer plusieurs versions de codes 
+ - Gestion simple d'un objet  
+ - Gestion simple d'un objet + recherche
+ - Gestion simple d'un objet + objet lié
+ - Gestion simple d'un objet + objet lié + recherche
+
+
+
 
 

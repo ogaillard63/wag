@@ -18,12 +18,10 @@ class #Objet#Manager {
 	* @param $id
 	*/
 	public function get#Objet#($id) {
-	if ($id) {
 		$q = $this->bdd->prepare("SELECT * FROM #table# WHERE id = :id");
 		$q->bindValue(':id', $id, PDO::PARAM_INT);
 		$q->execute();
 		return new #Objet#($q->fetch(PDO::FETCH_ASSOC));
-		}
 	}
 
 	/**
@@ -97,9 +95,14 @@ class #Objet#Manager {
 	* @param #Objet# $#objet#
 	*/
 	public function delete#Objet#(#Objet# $#objet#) {
-		$q = $this->bdd->prepare("DELETE FROM #table# WHERE id = :id");
-		$q->bindValue(':id', $#objet#->getId(), PDO::PARAM_INT);
-		return $q->execute();
+		try {	
+			$q = $this->bdd->prepare("DELETE FROM #table# WHERE id = :id");
+			$q->bindValue(':id', $#objet#->getId(), PDO::PARAM_INT);
+			return $q->execute();
+			}
+		catch( PDOException $Exception ) {
+			return false;
+		}
 	}
 
 	/**

@@ -51,7 +51,7 @@ switch($action) {
 
 	default:
 		$smarty->assign("titre", $translate->__('list_of_#objets#'));
-		$rpp = 5;
+		$rpp = 10;
 		if (empty($page)) $page = 1; // Display first page
 		$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp));
 		//$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp, true));
