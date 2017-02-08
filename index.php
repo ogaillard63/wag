@@ -143,14 +143,18 @@ switch ($action) {
 			$ouputFilePath = OUTPUT_CLASSES_PATH."/".$objet."Manager.class.php";
 
 			$tab_vars = array();
+			$query_fields = array();
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@binds@"), $cols, array("int"), $objet, array("id"));
 
 			foreach ($cols as $col)
-				if ($col["Field"] != "id") array_push($tab_vars, $col["Field"]." = :".$col["Field"]);
+				if ($col["Field"] != "id") {
+					array_push($tab_vars, $col["Field"]." = :".$col["Field"]);
+					array_push($query_fields, $col["Field"]." LIKE :query");
+				}
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#liste_vars#', '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(", ", $tab_vars), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#query_fields#', '#liste_vars#', '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(" OR ", $query_fields), implode(", ", $tab_vars), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du controleur --------------------------- */
@@ -195,8 +199,21 @@ switch ($action) {
 			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
 			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+			
+			/* ------- Génération du template search --------------------------- */
+			echo "> Fichier : <strong>".$objets."/"."search.tpl.html</strong><br/>";
 
-			/* ------- Ajout des traductions --------------------------- */
+			$tplFilePath = TPL_FOLDER."/"."search.tpl.html";
+			$ouputFilePath = OUTPUT_TPL_PATH."/".$objets."/"."search.tpl.html";
+
+			$content = file_get_contents($tplFilePath); // lit le template
+			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
+
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+
+			/* ------- Ajout des traductions en francais --------------------------- */
 			echo "> Fichier : <strong>fr.txt</strong><br/>";
 			$langFilePath = OUTPUT_LANG_PATH."/fr.txt";
 			$content = file_get_contents($langFilePath); // lit le fichier de langue

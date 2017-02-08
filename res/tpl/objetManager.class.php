@@ -45,6 +45,28 @@ class #Objet#Manager {
 		return $#objets#;
 	}
 
+	/**
+	* Recherche les #objets#
+	*/
+	/* >>>> modifier champ1, champ 2, etc  */
+	public function search#Objets#($query) {
+		$#objets# = array();
+		$q = $this->bdd->prepare('SELECT * FROM #table# 
+			WHERE #query_fields#');
+		$q->bindValue(':query', '%'.$query.'%', PDO::PARAM_STR);
+		$q->execute();
+		while ($data = $q->fetch(PDO::FETCH_ASSOC)) {
+			$#objet# = new #Objet#($data);
+			$#objet2#_manager = new #Objet2#Manager($this->bdd);
+			$#objet#->set#Objet2#($#objet2#_manager->get#Objet2#($#objet#->get#Objet2#Id()));
+			$#objets#[] = $#objet#;
+		}
+		return $#objets#;
+	}
+
+
+
+
 	/* public function get#Objets#($offset = null, $count = null, $isEagerFetch = false) {
 			$#objets# = array();
 			if (isset($offset) && isset($count)) {

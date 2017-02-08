@@ -17,9 +17,9 @@
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">ctypes</table>
-		<objet attribut="input">ctype</objet>
-		<objets attribut="input">ctypes</objets>
+		<table attribut="select">categories</table>
+		<objet attribut="input">category</objet>
+		<objets attribut="input">categories</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>

@@ -4,5 +4,8 @@ delete = effacer
 cancel = annuler
 save = enregistrer
 actions = actions
+search = rechercher
+search_results = résultats de la recherche
+query_too_short = texte de recherche trop court !
 
 # ------------------------- #

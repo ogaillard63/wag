@@ -13,6 +13,7 @@ require_once( "inc/prepend.php" );
 $action			= Utils::get_input('action','both');
 $id				= Utils::get_input('id','both');
 $page			= Utils::get_input('page','both');
+$query			= Utils::get_input('query','post');
 @vars@$#label#			= Utils::get_input('#label#','post');@vars@
 
 $#objet#_manager = new #Objet#Manager($bdd);
@@ -31,6 +32,24 @@ switch($action) {
 		$smarty->assign("#objet#", $#objet#_manager->get#Objet#($id));
 		//$smarty->assign("#objet2#s", $#objet2#_manager->get#Objet2#sForSelect());
 		$smarty->assign("content","#objets#/edit.tpl.html");
+		$smarty->display("main.tpl.html");
+		break;
+	
+	case "search" :
+		$smarty->assign("content","#objets#/search.tpl.html");
+		$smarty->display("main.tpl.html");
+		break;
+
+	case "search_results" :
+		if (strlen($query) > 2) {
+			$smarty->assign("#objets#", $#objet#_manager->search#Objets#($query));
+		}
+		else {
+			$log->notification($translate->__('query_too_short'));
+			Utils::redirection("#objets#.php?action=search");
+		}
+		$smarty->assign("query",$query);
+		$smarty->assign("content","#objets#/search.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
 

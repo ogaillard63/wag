@@ -45,6 +45,7 @@ class #Objet# {
 	}@int@@getters_setters@
 
 	/*
+	public $#objet2#;
 	// #objet2#
 	public function set#Objet2#($#objet2#) {
 		$this->#objet2# = $#objet2#;
