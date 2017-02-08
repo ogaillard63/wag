@@ -1,9 +1,8 @@
 <?php
 /**
- * @project		WebApp Generator
+ * @project		Mini WebApp Generator
  *
- * @author		Olivier Gaillard <olivier.gaillard@centrefrance.com>
- * @version		1.0 du 18/11/2014
+ * @author		Olivier Gaillard <ogaillar63d@gmail.com>
  * @desc	   	Generateur de webapp
  */
 
