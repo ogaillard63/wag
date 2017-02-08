@@ -8,6 +8,9 @@ des catégories. La table doit comporter un champ parent_id.
 
 - la table de l'objet lié doit avoir un champ name
 
+# Bugs
++ Le bouton ANNULER des formulaires fait un submit
++ Pas de notification lors de l'effacement
 
 # Todo
 + Normalisaition des id en uid
