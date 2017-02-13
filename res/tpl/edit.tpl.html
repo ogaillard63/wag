@@ -3,20 +3,15 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{if $#objet#->id >0}{#edit_a_#objet##|ucfirst}{else}{#add_a_#objet##|ucfirst}{/if}</h3>
-				<div class="actions pull-right">
-					<i class="fa fa-chevron-down"></i>
-					<i class="fa fa-times"></i>
-				</div>
 			</div>
 			<div class="panel-body">
 				<form role="form" name="form_param" method="post" action="#objets#.php">
 					<input name="id" type="hidden" value="{$#objet#->id}" />
 					<input name="action" type="hidden" value="save" />
 				<!--<div class="form-group">
-						<label>{##objet2##|ucfirst}</label>
-						{if isset($#objet#->#objet2#_id)}{html_options name=#objet2#_id options=$#objet2#s selected=$#objet#->#objet2#_id class="form-control"}{else}{html_options name=#objet2#_id options=$#objet2#s class="form-control"}{/if}
+						<label>{##linked_objet##|ucfirst}</label>
+						{if isset($#objet#->#linked_objet#_id)}{html_options name=#linked_objet#_id options=$#linked_objet#s selected=$#objet#->#linked_objet#_id class="form-control"}{else}{html_options name=#linked_objet#_id options=$#linked_objet#s class="form-control"}{/if}
 					</div>-->
-
 					@items@@default@		 <div class="form-group">
 					<label for="{##label##}">{##label##|ucfirst}</label>
 					<input class="form-control" type="text" name="#label#" value="{$#field#}" />
@@ -34,7 +29,7 @@
 					</script>
 					@date@@items@
 					<div align="right">
-						<button type="cancel" class="btn btn-default">{#cancel#|ucfirst}</button>
+						<!--<button type="cancel" class="btn btn-default">{#cancel#|ucfirst}</button>-->
 						<button type="submit" class="btn btn-primary">{#save#|ucfirst}</button>
 					</div>
 				</form>

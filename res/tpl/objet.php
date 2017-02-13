@@ -17,20 +17,20 @@ $query			= Utils::get_input('query','post');
 @vars@$#label#			= Utils::get_input('#label#','post');@vars@
 
 $#objet#_manager = new #Objet#Manager($bdd);
-// $#objet2#_manager = new #Objet2#Manager($bdd);
+// $#linked_objet#_manager = new #Linked_objet#Manager($bdd);
 
 switch($action) {
 	
 	case "add" :
 		$smarty->assign("#objet#", new #Objet#(array("id" => -1)));
-		//$smarty->assign("#objet2#s", $#objet2#_manager->get#Objet2#sForSelect());
+		//$smarty->assign("#linked_objet#s", $#linked_objet#_manager->get#Linked_objet#sForSelect());
 		$smarty->assign("content", "#objets#/edit.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
 	
 	case "edit" :
 		$smarty->assign("#objet#", $#objet#_manager->get#Objet#($id));
-		//$smarty->assign("#objet2#s", $#objet2#_manager->get#Objet2#sForSelect());
+		//$smarty->assign("#linked_objet#s", $#linked_objet#_manager->get#Linked_objet#sForSelect());
 		$smarty->assign("content","#objets#/edit.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;

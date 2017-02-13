@@ -3,16 +3,12 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{#list_of_#objets##|ucfirst}</h3>
-				<div class="actions pull-right">
-					<i class="fa fa-chevron-down"></i>
-					<i class="fa fa-times"></i>
-				</div>
 			</div>
 			<div class="panel-body">
 				{if not empty($#objets#)}<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<!--<th>{##objet2##|ucfirst}</th>-->
+@delete@					<!--<th>{##linked_objet##|ucfirst}</th>-->
 @headers@@default@						<th>{##label##|ucfirst}</th>@default@@date@						<th>{##label##|ucfirst}</th>@date@@headers@
 						<th colspan="2">{#actions#|ucfirst}</th>
 					</tr>
@@ -20,7 +16,7 @@
 				<tbody>
 					{foreach from=$#objets# item=#objet#}
 					<tr>
-						<!--<td align="left">{$#objet#->#objet2#->name}</td>-->
+@delete@					<!--<td align="left">{$#objet#->#linked_objet#->name}</td>-->
 @fields@@default@						<td align="left">{$#field#}</td>@default@@date@						<td align="left">{$#field#|date_format:"%d/%m/%Y"}</td>@date@@fields@
 						<td width="1%" align="center" nowrap="nowrap"><a class="btn btn-sm btn-success" href="#objets#.php?action=edit&id={$#objet#->id}" title="{#edit#|ucfirst}">{#edit#|ucfirst}</a></td>
 						<td width="1%" align="center" nowrap="nowrap"><a class="btn btn-sm btn-danger" href="#objets#.php?action=delete&id={$#objet#->id}" title="{#delete#|ucfirst}" onclick="return confirm('{#do_you_really_want_to_delete_this_#objet##|ucfirst} ?')">{#delete#|ucfirst}</a></td>
@@ -28,15 +24,17 @@
 					{/foreach}
 				</tbody>
 			</table>
-			<ul class="pagination pull-left">
-				{if not empty($btn_nav)} {foreach from=$btn_nav item=btn}
-				<li{if $btn.active} class="active" {/if}><a href="#objets#.php?{$btn.link}">{$btn.label}</a></li>
-					{/foreach}{/if}
-			</ul>
 			{else}<h4>{#no_#objet##}</h4>{/if}
-			<div align="right">
-				<a href="#objets#.php?action=search" class="btn btn-success">{#search#|ucfirst}</a>
-				<a href="#objets#.php?action=add" class="btn btn-primary">{#add_a_#objet##|ucfirst}</a>
+			<div class="panel-footer">
+				<ul class="pagination">
+					{if not empty($btn_nav)} {foreach from=$btn_nav item=btn}
+					<li{if $btn.active} class="active" {/if}><a href="#objets#.php?{$btn.link}">{$btn.label}</a></li>
+						{/foreach}{/if}
+				</ul>
+				<div class="btn-group pull-right">
+					<a href="#objets#.php?action=search" class="btn btn-success">{#search#|ucfirst}</a>
+					<a href="#objets#.php?action=add" class="btn btn-primary">{#add_a_#objet##|ucfirst}</a>
+				</div>
 			</div>
 		</div>
 	</div>

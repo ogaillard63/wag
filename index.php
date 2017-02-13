@@ -76,13 +76,14 @@ switch ($action) {
 
 		$project_name 		= $_POST['project_name'];
 		$project_folder		= utils::slugify($project_name);
-		$project_author 	= $_POST['project_author'];
-		$table 				= $_POST['table'];
-		$objet 				= $_POST['objet'];
-		$objets 			= $_POST['objets'];
+		$project_author 	= trim($_POST['project_author']);
+		$table 				= trim($_POST['table']);
+		$objet 				= trim($_POST['objet']);
+		$objets 			= trim($_POST['objets']);
 
-		$objet2 			= $_POST['objet2'];
-		$objet3 			= $_POST['objet3'];
+		$linked_objet 		= trim($_POST['linked_objet']);
+		$linked_objets 		= trim($_POST['linked_objets']);
+		$search 			= $_POST['search'];
 
 		// Les paramètres éventuels saisies pour les champs sont dans le $_POST
 
@@ -128,8 +129,8 @@ switch ($action) {
 			$content = utils::iterationReplace($content, array("@vars@"), $cols, null, $objet);
 			$content = utils::iterationReplace($content, array("@getters_setters@"), $cols, array("int"), $objet);
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
 
 			//utils::debugArray($replace);
 
@@ -152,8 +153,8 @@ switch ($action) {
 					array_push($query_fields, $col["Field"]." LIKE :query");
 				}
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#query_fields#', '#liste_vars#', '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(" OR ", $query_fields), implode(", ", $tab_vars), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#query_fields#', '#liste_vars#', '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(" OR ", $query_fields), implode(", ", $tab_vars), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du controleur --------------------------- */
@@ -168,8 +169,8 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@vars@"), $cols, null, $objet, array("id"));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", "#liste_sql_fields#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(", ", $fields), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", "#liste_sql_fields#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(", ", $fields), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template edit --------------------------- */
@@ -182,8 +183,8 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@items@"), $cols, array("text", "date"), $objet, array("id"));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template list --------------------------- */
@@ -195,8 +196,10 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#', '@delete@');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets), "");
+			
+			if (empty($linked_objets)) $content = clearDeleteLines($content);
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			
 			/* ------- Génération du template search --------------------------- */
@@ -208,10 +211,11 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#objet2#', '#objet3#', '#Objet2#', '#Objet3#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $objet2, $objet3, ucfirst($objet2), ucfirst($objet3));
-			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#', '@delete@');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets), "");
 
+			if (empty($linked_objets)) $content = clearDeleteLines($content);
+			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			/* ------- Ajout des traductions en francais --------------------------- */
 			echo "> Fichier : <strong>fr.txt</strong><br/>";
 			$langFilePath = OUTPUT_LANG_PATH."/fr.txt";
@@ -248,5 +252,13 @@ switch ($action) {
 }
 
 /* ------------------------------------------- Fonctions ------------------------------------ */
-
+// Efface les lignes avec la balise @delete@
+function clearDeleteLines($content) {
+	$lines = explode("\n", $content);
+	$content = "";
+	foreach($lines as $line) {
+		if (strpos($line, "@delete@") === false) $content = $content.$line;
+	}
+	return $content;
+}
 ?>

@@ -30,5 +30,5 @@ function smarty_modifier_replace($string, $search, $replace)
         return smarty_mb_str_replace($search, $replace, $string);
     }
 
-    return str_replace($search, $replace, $string);
+    return str_ireplace($search, $replace, $string);
 }

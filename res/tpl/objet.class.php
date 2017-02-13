@@ -8,6 +8,7 @@
 
 class #Objet# {
 @vars@	public $#label#;@vars@
+// public $#linked_objet#;
 
 	public function __construct(array $data) {
 		$this->hydrate($data);
@@ -45,13 +46,12 @@ class #Objet# {
 	}@int@@getters_setters@
 
 	/*
-	public $#objet2#;
-	// #objet2#
-	public function set#Objet2#($#objet2#) {
-		$this->#objet2# = $#objet2#;
+	// #linked_objet#
+	public function set#Linked_objet#($#linked_objet#) {
+		$this->#linked_objet# = $#linked_objet#;
 	}
-	public function get#Objet2#() {
-		return $this->#objet2#;
+	public function get#Linked_objet#() {
+		return $this->#linked_objet#;
 	}
 	*/
 
