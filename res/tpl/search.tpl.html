@@ -29,19 +29,21 @@
 				<table class="table table-bordered table-striped">
 					<thead>
 						<tr>
-@delete@							<!--<th>{##linked_objet##|ucfirst}</th>-->
-							@headers@@default@
-							<th>{##label##|ucfirst}</th>@default@@date@
-							<th>{##label##|ucfirst}</th>@date@@headers@
+[linked_objet]
+						<th>{##linked_objet##|ucfirst}</th>
+[/linked_objet]
+[loop]							<th>{##field##|ucfirst}</th>
+[/loop]
 						</tr>
 					</thead>
 					<tbody>
 						{foreach from=$#objets# item=#objet#}
 						<tr>
-@delete@							<!--<td align="left">{$#objet#->#linked_objet#->name}</td>-->
-							@fields@@default@
-							<td align="left">{$#field#|replace:"{$query}":"<strong>{$query}</strong>"}</td>@default@@date@
-							<td align="left">{$#field#|date_format:"%d/%m/%Y"}</td>@date@@fields@
+[linked_objet]
+							<td align="left">{$#objet#->#linked_objet#->name}</td>
+[/linked_objet]
+[loop]						<td align="left">{$#field##opt#|replace:"{$query}":"<strong>{$query}</strong>"}</td
+[/loop]
 						</tr>
 						{/foreach}
 					</tbody>

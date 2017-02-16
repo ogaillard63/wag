@@ -16,7 +16,11 @@ define('RES_PATH', ROOT_PATH.'/res');
 define('BASE_PATH', RES_PATH.'/base');
 define('TPL_FOLDER', RES_PATH.'/tpl');
 define('XML_FILEPATH', RES_PATH.'/data.xml');
-define('TPL_FILEPATH', TPL_FOLDER.'/form.tpl.html');
+define('TPL_FILEPATH', RES_PATH.'/form.html');
+
+// vars
+$hasSearchEngine = false;
+$hasLinkedObject = false;
 
 require(RES_PATH . '/utils.php');
 $utils = new Utils(); // fonctions utilitaires
@@ -81,58 +85,77 @@ switch ($action) {
 		$objet 				= trim($_POST['objet']);
 		$objets 			= trim($_POST['objets']);
 
-		$linked_objet 		= trim($_POST['linked_objet']);
-		$linked_objets 		= trim($_POST['linked_objets']);
-		$search 			= $_POST['search'];
+		$linked_objet 		= utils::getInput('linked_objet');
+		$linked_objets 		= utils::getInput('linked_objets');
+		$search_engine 		= utils::getInput('search_engine');
 
-		// Les paramètres éventuels saisies pour les champs sont dans le $_POST
-
-
+		// has Linked Object
+		if (strlen($linked_objet)>0) $hasLinkedObject = true;
+		// has Search Engine
+		if (strlen($search_engine)>0) $hasSearchEngine = true;	
+		if ($hasLinkedObject) echo "hasLinkedObject <br/>";
+		if ($hasSearchEngine) echo "hasSearchEngine <br/>";
 		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"], $_POST["db_base"]);
 		if (!$db->connect_error) {
 			// Creation du dossier de  base
-			define('OUTPUT_FOLDER', 'out/' . $project_folder);
-			define('OUTPUT_PATH', ROOT_PATH.'/'.OUTPUT_FOLDER);
-			define('OUTPUT_LANG_PATH', OUTPUT_PATH.'/lang');
-			define('OUTPUT_PROPERTIES_PATH', OUTPUT_PATH.'/inc/properties');
-			define('OUTPUT_CLASSES_PATH', OUTPUT_PATH.'/inc/classes');
-			define('OUTPUT_TPL_PATH', OUTPUT_PATH.'/tpl');
-
-			if (!is_dir(OUTPUT_PATH)) {
-				mkdir(OUTPUT_PATH, 0777, true);
-				utils::copyDir(BASE_PATH.'/', OUTPUT_PATH.'/');
+			define('O_FOLDER', 'out/' . $project_folder);
+			define('O_PATH', ROOT_PATH.'/'.O_FOLDER);
+			define('O_LANG_PATH', O_PATH.'/lang');
+			define('O_PROPERTIES_PATH', O_PATH.'/inc/properties');
+			define('O_CLASSES_PATH', O_PATH.'/inc/classes');
+			define('O_TPL_PATH', O_PATH.'/tpl');
+	
+			// copie des elements de base
+			if (!is_dir(O_PATH)) {
+				mkdir(O_PATH, 0777, true);
+				utils::copyDir(BASE_PATH.'/', O_PATH.'/');
 			}
-
-
+			
+			// récupére la liste de colonne 
 			$cols = utils::getFields($db, $table, $_POST);
+			$colsNoId = $cols; 	// liste des colonnes sans la colonne Id
+			array_shift($colsNoId); // enleve la colone id
+
+			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
+			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
 
 			//utils::debugArray($cols); die();
+
+			// liste des fichiers
+			 /*
+			 $files = (
+				array ( "file"=> "properties.ini", "path"=>  O_PROPERTIES_PATH, "tpl"=>  "properties.ini"),
+				array ( "file"=> $objet.".class.php", "path"=>  O_CLASSES_PATH, "tpl"=>  "objet.class.php"),
+				);
+
+			*/
+			
+			
+			
 
 			// --------------------------- > Fichier de properties ---------------------------
 			echo "> Fichier : <strong>properties.ini</strong><br/>";
 			$tplFilePath = TPL_FOLDER.DS."properties.ini";
-			$ouputFilePath = OUTPUT_PROPERTIES_PATH.DS."properties.ini";
+			$ouputFilePath = O_PROPERTIES_PATH.DS."properties.ini";
 
 			$content = file_get_contents($tplFilePath); // lit le template
 
-			$search  = array("#db_server#", "#db_user#", "#db_password#", '#db_base#');
-			$replace = array($db_server, $db_user, $db_password, $db_base,);
-			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+			$search1  = array("#db_server#", "#db_user#", "#db_password#", '#db_base#');
+			$replace1 = array($db_server, $db_user, $db_password, $db_base,);
+			file_put_contents($ouputFilePath, str_replace($search1, $replace1, $content));
 
 			// --------------------------- Génération de la classe ---------------------------
 			echo "> Fichier : <strong>".$objet.".class.php</strong><br/>";
 
 			$tplFilePath = TPL_FOLDER."/objet.class.php";
-			$ouputFilePath = OUTPUT_CLASSES_PATH."/".$objet.".class.php";
+			$ouputFilePath = O_CLASSES_PATH."/".$objet.".class.php";
 
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@vars@"), $cols, null, $objet);
-			$content = utils::iterationReplace($content, array("@getters_setters@"), $cols, array("int"), $objet);
+			//utils::debugArray($cols);
+			utils::fetchLoopCode($content, "var", $cols, array("(integer)"));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
-
-			//utils::debugArray($replace);
+			// efface ou conserve les lignes de codes selon les options choisies
+			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
 
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
@@ -140,85 +163,88 @@ switch ($action) {
 			echo "> Fichier : <strong>".$objet."Manager.class.php</strong><br/>";
 
 			$tplFilePath = TPL_FOLDER."/"."objetManager.class.php";
-			$ouputFilePath = OUTPUT_CLASSES_PATH."/".$objet."Manager.class.php";
+			$ouputFilePath = O_CLASSES_PATH."/".$objet."Manager.class.php";
 
-			$tab_vars = array();
-			$query_fields = array();
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@binds@"), $cols, array("int"), $objet, array("id"));
+			utils::fetchImplode($content, "var1", $colsNoId, " OR ");
+			utils::fetchImplode($content, "var2", $colsNoId, ", ");
+			utils::fetchLoopCode($content, "var3", $colsNoId, array("PARAM_INT", "PARAM_STR", "PARAM_STR", "PARAM_STR", "PARAM_STR"));
 
-			foreach ($cols as $col)
-				if ($col["Field"] != "id") {
-					array_push($tab_vars, $col["Field"]." = :".$col["Field"]);
-					array_push($query_fields, $col["Field"]." LIKE :query");
-				}
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#query_fields#', '#liste_vars#', '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(" OR ", $query_fields), implode(", ", $tab_vars), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
+			// efface ou conserve les lignes de codes selon les options choisies
+			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
+			utils::fetchOptionalCode($content, "no_linked_objet", !$hasLinkedObject);
+			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
+
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du controleur --------------------------- */
 			echo "> Fichier : <strong>".$objets.".php</strong><br/>";
 
 			$tplFilePath = TPL_FOLDER."/"."objet.php";
-			$ouputFilePath = OUTPUT_PATH."/".$objets.".php";
-
-			$fields = array();
-			foreach ($cols as $col) array_push($fields, "\"".$col["Field"]."\""." => $".$col["Field"]);
-
+			$ouputFilePath = O_PATH."/".$objets.".php";
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@vars@"), $cols, null, $objet, array("id"));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", "#liste_sql_fields#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), implode(", ", $fields), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
+			utils::fetchLoopCode($content, "var", $colsNoId);
+			utils::fetchImplode($content, "var", $cols, ", ");
+			
+			// efface les lignes de codes optionnelles
+			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
+			utils::fetchOptionalCode($content, "no_linked_objet", !$hasLinkedObject);
+			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
+
+			
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template edit --------------------------- */
 			echo "> Fichier : <strong>".$objets."/"."edit.tpl.html</strong><br/>";
 
 			$tplFilePath = TPL_FOLDER."/"."edit.tpl.html";
-			utils::createFolders(OUTPUT_TPL_PATH."/".$objets);
-			$ouputFilePath = OUTPUT_TPL_PATH."/".$objets."/"."edit.tpl.html";
+			utils::createFolders(O_TPL_PATH."/".$objets);
+			$ouputFilePath = O_TPL_PATH."/".$objets."/"."edit.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@items@"), $cols, array("text", "date"), $objet, array("id"));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets));
+			// efface les lignes de codes optionnelles
+			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
+
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template list --------------------------- */
 			echo "> Fichier : <strong>".$objets."/"."list.tpl.html</strong><br/>";
 
 			$tplFilePath = TPL_FOLDER."/"."list.tpl.html";
-			$ouputFilePath = OUTPUT_TPL_PATH."/".$objets."/"."list.tpl.html";
+			$ouputFilePath = O_TPL_PATH."/".$objets."/"."list.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
 			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#', '@delete@');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets), "");
-			
-			if (empty($linked_objets)) $content = clearDeleteLines($content);
+			utils::fetchLoopCode($content, "field", $colsNoId, array('', '|date_format:"%d/%m/%Y"'));
+			// efface les lignes de codes optionnelles
+			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
+			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
+
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			
 			/* ------- Génération du template search --------------------------- */
-			echo "> Fichier : <strong>".$objets."/"."search.tpl.html</strong><br/>";
+			if ($hasSearchEngine) {
+				echo "> Fichier : <strong>".$objets."/"."search.tpl.html</strong><br/>";
 
-			$tplFilePath = TPL_FOLDER."/"."search.tpl.html";
-			$ouputFilePath = OUTPUT_TPL_PATH."/".$objets."/"."search.tpl.html";
+				$tplFilePath = TPL_FOLDER."/"."search.tpl.html";
+				$ouputFilePath = O_TPL_PATH."/".$objets."/"."search.tpl.html";
 
-			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
+				$content = file_get_contents($tplFilePath); // lit le template
+				utils::fetchLoopCode($content, "field", $colsNoId, array('', '|date_format:"%d/%m/%Y"'));
 
-			$search  = array("#project_name#", "#project_author#", "#date#", "#table#", "#objet#", "#objets#", "#Objet#", "#Objets#", '#linked_objet#', '#linked_objets#', '#Linked_objet#', '#Linked_objets#', '@delete@');
-			$replace = array($project_name, $project_author, date("d/m/Y"), $table, $objet, $objets, ucfirst($objet), ucfirst($objets), $linked_objet, $linked_objets, ucfirst($linked_objet), ucfirst($linked_objets), "");
+				// efface les lignes de codes optionnelles
+				utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
+				file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+			}
 
-			if (empty($linked_objets)) $content = clearDeleteLines($content);
-			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			/* ------- Ajout des traductions en francais --------------------------- */
 			echo "> Fichier : <strong>fr.txt</strong><br/>";
-			$langFilePath = OUTPUT_LANG_PATH."/fr.txt";
+			$langFilePath = O_LANG_PATH."/fr.txt";
 			$content = file_get_contents($langFilePath); // lit le fichier de langue
 
 			$data = "\n#".$objets."\n"; // titre de la section
@@ -242,7 +268,7 @@ switch ($action) {
 
 			/* ------------------------------------------------------------------- */
 
-			echo "<br/><a target='_blank' href='".OUTPUT_FOLDER.DS.$objets.".php'>Tester</a> | <a href='index.php'>Retour</a>";
+			echo "<br/><a target='_blank' href='".O_FOLDER.DS.$objets.".php'>Tester</a> | <a href='index.php'>Retour</a>";
 			exit();
 		}
 		break;
@@ -251,14 +277,4 @@ switch ($action) {
 		utils::displayForm(TPL_FILEPATH, XML_FILEPATH, array("project"), "save_project", "");
 }
 
-/* ------------------------------------------- Fonctions ------------------------------------ */
-// Efface les lignes avec la balise @delete@
-function clearDeleteLines($content) {
-	$lines = explode("\n", $content);
-	$content = "";
-	foreach($lines as $line) {
-		if (strpos($line, "@delete@") === false) $content = $content.$line;
-	}
-	return $content;
-}
 ?>

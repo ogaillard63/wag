@@ -13,14 +13,19 @@
 						<label>{##linked_objet##|ucfirst}</label>
 						{if isset($#objet#->#linked_objet#_id)}{html_options name=#linked_objet#_id options=$#linked_objet#s selected=$#objet#->#linked_objet#_id class="form-control"}{else}{html_options name=#linked_objet#_id options=$#linked_objet#s class="form-control"}{/if}
 					</div>
-					[linked_objet]
-					@items@@default@		 <div class="form-group">
+					[/linked_objet]
+[loop2]
+[default]			 <div class="form-group">
 					<label for="{##label##}">{##label##|ucfirst}</label>
 					<input class="form-control" type="text" name="#label#" value="{$#field#}" />
-				</div>@default@@text@		 <div class="form-group">
+				</div>
+[/default]
+[text]				<div class="form-group">
 					<label>{##label##|ucfirst}</label>
 					<textarea class="form-control" name="#label#" rows="5">{$#field#}</textarea>
-				</div>@text@@date@		 <div class="form-group">
+			</div>
+[/text]
+[date]				<div class="form-group">
 					<label>{##label##|ucfirst}</label>
 					<input class="form-control datepicker" type="text" name="#label#" value="{$#field#|date_format:"%d/%m/%Y"}" />
 				</div>
@@ -29,7 +34,8 @@
 							language: "fr"
 						});
 					</script>
-					@date@@items@
+[date]					
+[/loop2]
 					<div align="right">
 						<!--<button type="cancel" class="btn btn-default">{#cancel#|ucfirst}</button>-->
 						<button type="submit" class="btn btn-primary">{#save#|ucfirst}</button>

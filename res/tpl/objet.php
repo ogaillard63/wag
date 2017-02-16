@@ -11,30 +11,40 @@ require_once( "inc/prepend.php" );
 
 // Récupération des variables
 $action			= Utils::get_input('action','both');
-$id				= Utils::get_input('id','both');
 $page			= Utils::get_input('page','both');
+$id				= Utils::get_input('id','both');
+[loop]$#var#			= Utils::get_input('#var#','post');
+[/loop]
+[search_engine]
 $query			= Utils::get_input('query','post');
-@vars@$#label#			= Utils::get_input('#label#','post');@vars@
+[/search_engine]
 
 $#objet#_manager = new #Objet#Manager($bdd);
-// $#linked_objet#_manager = new #Linked_objet#Manager($bdd);
+[linked_objet]
+$#linked_objet#_manager = new #Linked_objet#Manager($bdd);
+[/linked_objet]
 
 switch($action) {
 	
 	case "add" :
 		$smarty->assign("#objet#", new #Objet#(array("id" => -1)));
-		//$smarty->assign("#linked_objet#s", $#linked_objet#_manager->get#Linked_objet#sForSelect());
+[linked_objet]
+		$smarty->assign("#linked_objet#s", $#linked_objet#_manager->get#Linked_objet#sForSelect());
+[/linked_objet]
 		$smarty->assign("content", "#objets#/edit.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
 	
 	case "edit" :
 		$smarty->assign("#objet#", $#objet#_manager->get#Objet#($id));
-		//$smarty->assign("#linked_objet#s", $#linked_objet#_manager->get#Linked_objet#sForSelect());
+[linked_objet]
+		$smarty->assign("#linked_objet#s", $#linked_objet#_manager->get#Linked_objet#sForSelect());
+[/linked_objet]
 		$smarty->assign("content","#objets#/edit.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
-	
+
+[search_engine]
 	case "search" :
 		$smarty->assign("content","#objets#/search.tpl.html");
 		$smarty->display("main.tpl.html");
@@ -52,9 +62,10 @@ switch($action) {
 		$smarty->assign("content","#objets#/search.tpl.html");
 		$smarty->display("main.tpl.html");
 		break;
+[/search_engine]
 
 	case "save" :
-		$data = array(#liste_sql_fields#);
+		$data = array([implode]"#var#" => $#var#[/implode]);
 		$#objet#_manager->save#Objet#(new #Objet#($data));
 		$log->notification($translate->__('the_#objet#_has_been_saved'));
 		Utils::redirection("#objets#.php");
@@ -72,8 +83,12 @@ switch($action) {
 		$smarty->assign("titre", $translate->__('list_of_#objets#'));
 		$rpp = 10;
 		if (empty($page)) $page = 1; // Display first page
+[no_linked_objet]
 		$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp));
-		//$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp, true));
+[/no_linked_objet]
+[linked_objet]
+		$smarty->assign("#objets#", $#objet#_manager->get#Objets#ByPage($page, $rpp, true));
+[/linked_objet]
 		$pagination = new Pagination($page, $#objet#_manager->getMax#Objets#(), $rpp);
 		$smarty->assign("btn_nav", $pagination->getNavigation());
 

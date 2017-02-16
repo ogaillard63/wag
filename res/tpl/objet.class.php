@@ -7,8 +7,11 @@
 */
 
 class #Objet# {
-@vars@	public $#label#;@vars@
-// public $#linked_objet#;
+[loop]	public $#var#;
+[/loop]
+[linked_objet]
+	public $#linked_objet#;
+[/linked_objet]
 
 	public function __construct(array $data) {
 		$this->hydrate($data);
@@ -31,21 +34,15 @@ class #Objet# {
 
 	/* --- Getters et Setters --- */
 
-@getters_setters@@default@	// #label#
-	public function set#Label#($#label#) {
-		$this->#label# = $#label#;
+[loop]	// #var#;
+	public function set#Var#($#var#) {
+		$this->#var# = #opt#$#var#;
 	}
-	public function get#Label#() {
-		return $this->#label#;
-	}@default@@int@	// #label#
-	public function set#Label#($#label#) {
-		$this->#label# = (integer)$#label#;
+	public function get#Var#() {
+		return $this->#var#;
 	}
-	public function get#Label#() {
-		return $this->#label#;
-	}@int@@getters_setters@
-
-	/*
+[/loop]
+[linked_objet]
 	// #linked_objet#
 	public function set#Linked_objet#($#linked_objet#) {
 		$this->#linked_objet# = $#linked_objet#;
@@ -53,7 +50,7 @@ class #Objet# {
 	public function get#Linked_objet#() {
 		return $this->#linked_objet#;
 	}
-	*/
+[/linked_objet]
 
 }
 ?>

@@ -2,7 +2,7 @@
 <webapp>
 	<section type="project">
 		<title>Project</title>
-		<project_name attribut="input">memo_info</project_name>
+		<project_name attribut="input">test</project_name>
 		<project_author attribut="input">Olivier Gaillard</project_author>
 	</section>
 	<section type="connection">
@@ -13,20 +13,20 @@
 	</section>
 	<section type="database">
 		<title>Database</title>
-		<db_base attribut="select">memo_info</db_base>
+		<db_base attribut="select">test</db_base>
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">items</table>
-		<objet attribut="input">item</objet>
-		<objets attribut="input">items</objets>
+		<table attribut="select">teams</table>
+		<objet attribut="input">team</objet>
+		<objets attribut="input">teams</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,section_id,title,link,info_link,raw_order</fields>
+		<fields attribut="field">id,name</fields>
 
 		<linked_objet attribut="input"/>
 		<linked_objets attribut="input"/>
-		<search attribut="input"/>
+		<search_engine attribut="checkbox"/>
 	</section>
 </webapp>
