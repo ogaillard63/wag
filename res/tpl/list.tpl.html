@@ -12,8 +12,7 @@
 						<th>{##linked_objet##|ucfirst}</th>
 [/linked_objet]
 [loop]						<th>{##field##|ucfirst}</th>
-[/loop]
-						<th colspan="2">{#actions#|ucfirst}</th>
+[/loop]						<th colspan="2">{#actions#|ucfirst}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -22,7 +21,11 @@
 [linked_objet]
 						<td align="left">{$#objet#->#linked_objet#->name}</td>
 [/linked_objet]
-[loop]						<td align="left">{$#objet#->#field##opt#}</td>
+[loop]
+[date]						<td align="left">{$#objet#->#field#|date_format:"%d/%m/%Y"}</td>
+[/date]
+[default]						<td align="left">{$#objet#->#field#}</td>
+[/default]
 [/loop]						<td width="1%" align="center" nowrap="nowrap"><a class="btn btn-sm btn-success" href="#objets#.php?action=edit&id={$#objet#->id}" title="{#edit#|ucfirst}">{#edit#|ucfirst}</a></td>
 						<td width="1%" align="center" nowrap="nowrap"><a class="btn btn-sm btn-danger" href="#objets#.php?action=delete&id={$#objet#->id}" title="{#delete#|ucfirst}" onclick="return confirm('{#do_you_really_want_to_delete_this_#objet##|ucfirst} ?')">{#delete#|ucfirst}</a></td>
 					</tr>

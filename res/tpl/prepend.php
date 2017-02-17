@@ -58,6 +58,17 @@ $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Log
 $log = new Logger($bdd, $smarty, $session);
 
+[authentification]
+// Authentification
+$user = new UserAuth($bdd);
+if ($user->isLogged())
+	$smarty->assign("user", $session->getValue("firstname")." ".$session->getValue("name"));
+// Profils
+define('SUPER_ADMIN', 		300);
+define('ADMIN', 			200);
+define('USER', 				100);
+[/authentification]
+
 // Gestion des traductions
 $_SESSION['filePathLang'] = PATH_LANG.DS."fr.txt";
 if(isset($_GET['cnt'])) {

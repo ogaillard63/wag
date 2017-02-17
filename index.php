@@ -14,6 +14,7 @@ define('DS', '/');
 define('ROOT_PATH', dirname (__FILE__));
 define('RES_PATH', ROOT_PATH.'/res');
 define('BASE_PATH', RES_PATH.'/base');
+define('AUTH_PATH', RES_PATH.'/auth');
 define('TPL_FOLDER', RES_PATH.'/tpl');
 define('XML_FILEPATH', RES_PATH.'/data.xml');
 define('TPL_FILEPATH', RES_PATH.'/form.html');
@@ -88,29 +89,33 @@ switch ($action) {
 		$linked_objet 		= utils::getInput('linked_objet');
 		$linked_objets 		= utils::getInput('linked_objets');
 		$search_engine 		= utils::getInput('search_engine');
+		$authentification 		= utils::getInput('authentification');
 
 		// has Linked Object
 		if (strlen($linked_objet)>0) $hasLinkedObject = true;
 		// has Search Engine
 		if (strlen($search_engine)>0) $hasSearchEngine = true;	
-		if ($hasLinkedObject) echo "hasLinkedObject <br/>";
-		if ($hasSearchEngine) echo "hasSearchEngine <br/>";
+		// has Authentification
+		if (strlen($authentification)>0) $hasAuth = true;	
+		
 		$db = utils::getMysqlCnx($_POST["db_server"], $_POST["db_user"], $_POST["db_password"], $_POST["db_base"]);
 		if (!$db->connect_error) {
 			// Creation du dossier de  base
 			define('O_FOLDER', 'out/' . $project_folder);
 			define('O_PATH', ROOT_PATH.'/'.O_FOLDER);
 			define('O_LANG_PATH', O_PATH.'/lang');
-			define('O_PROPERTIES_PATH', O_PATH.'/inc/properties');
-			define('O_CLASSES_PATH', O_PATH.'/inc/classes');
+			define('O_INC_PATH', O_PATH.'/inc');
+			define('O_PROPERTIES_PATH', O_INC_PATH.'/properties');
+			define('O_CLASSES_PATH', O_INC_PATH.'/classes');
 			define('O_TPL_PATH', O_PATH.'/tpl');
 	
 			// copie des elements de base
 			if (!is_dir(O_PATH)) {
 				mkdir(O_PATH, 0777, true);
-				utils::copyDir(BASE_PATH.'/', O_PATH.'/');
 			}
-			
+			utils::copyDir(BASE_PATH.'/', O_PATH.'/');
+			if ($hasAuth) utils::copyDir(AUTH_PATH.'/', O_PATH.'/');
+
 			// récupére la liste de colonne 
 			$cols = utils::getFields($db, $table, $_POST);
 			$colsNoId = $cols; 	// liste des colonnes sans la colonne Id
@@ -152,7 +157,7 @@ switch ($action) {
 
 			$content = file_get_contents($tplFilePath); // lit le template
 			//utils::debugArray($cols);
-			utils::fetchLoopCode($content, "var", $cols, array("(integer)"));
+			utils::fetchLoopCode($content, "var", $cols);
 
 			// efface ou conserve les lignes de codes selon les options choisies
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
@@ -168,7 +173,7 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			utils::fetchImplode($content, "var1", $colsNoId, " OR ");
 			utils::fetchImplode($content, "var2", $colsNoId, ", ");
-			utils::fetchLoopCode($content, "var3", $colsNoId, array("PARAM_INT", "PARAM_STR", "PARAM_STR", "PARAM_STR", "PARAM_STR"));
+			utils::fetchLoopCode($content, "var3", $colsNoId);
 
 
 			// efface ou conserve les lignes de codes selon les options choisies
@@ -192,8 +197,8 @@ switch ($action) {
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
 			utils::fetchOptionalCode($content, "no_linked_objet", !$hasLinkedObject);
 			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
+			utils::fetchOptionalCode($content, "authentification", $hasAuth);
 
-			
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template edit --------------------------- */
@@ -204,7 +209,8 @@ switch ($action) {
 			$ouputFilePath = O_TPL_PATH."/".$objets."/"."edit.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@items@"), $cols, array("text", "date"), $objet, array("id"));
+			//$content = utils::iterationReplace($content, array("@items@"), $cols, array("text", "date"), $objet, array("id"));
+			utils::fetchLoopCode($content, "var", $colsNoId);
 
 			// efface les lignes de codes optionnelles
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
@@ -218,9 +224,8 @@ switch ($action) {
 			$ouputFilePath = O_TPL_PATH."/".$objets."/"."list.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
-			$content = utils::iterationReplace($content, array("@headers@", "@fields@"), $cols, array("date"), $objet, array("id"), array("text"), true);
 
-			utils::fetchLoopCode($content, "field", $colsNoId, array('', '|date_format:"%d/%m/%Y"'));
+			utils::fetchLoopCode($content, "field", $colsNoId);
 			// efface les lignes de codes optionnelles
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
 			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
@@ -235,13 +240,42 @@ switch ($action) {
 				$ouputFilePath = O_TPL_PATH."/".$objets."/"."search.tpl.html";
 
 				$content = file_get_contents($tplFilePath); // lit le template
-				utils::fetchLoopCode($content, "field", $colsNoId, array('', '|date_format:"%d/%m/%Y"'));
+				utils::fetchLoopCode($content, "field", $colsNoId);
 
 				// efface les lignes de codes optionnelles
 				utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
 				file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			}
+			
+			/* ------- Génération du template header --------------------------- */
+			if ($hasSearchEngine) {
+				echo "> Fichier : <strong>header.tpl.html</strong><br/>";
 
+				$tplFilePath = TPL_FOLDER."/"."header.tpl.html";
+				$ouputFilePath = O_TPL_PATH."/header.tpl.html";
+
+				$content = file_get_contents($tplFilePath); // lit le template
+				utils::fetchOptionalCode($content, "authentification", $hasAuth);
+
+				// efface les lignes de codes optionnelles
+				file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+			}
+			
+			/* ------- Génération du fichier prepend --------------------------- */
+			if ($hasSearchEngine) {
+				echo "> Fichier : <strong>prepend.php</strong><br/>";
+
+				$tplFilePath = TPL_FOLDER."/prepend.php";
+				$ouputFilePath = O_INC_PATH."/prepend.php";
+
+				$content = file_get_contents($tplFilePath); // lit le template
+				
+				// efface les lignes de codes optionnelles
+				utils::fetchOptionalCode($content, "authentification", $hasLinkedObject);
+
+				// efface les lignes de codes optionnelles
+				file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+			}
 			/* ------- Ajout des traductions en francais --------------------------- */
 			echo "> Fichier : <strong>fr.txt</strong><br/>";
 			$langFilePath = O_LANG_PATH."/fr.txt";

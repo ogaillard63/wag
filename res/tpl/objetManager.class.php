@@ -141,7 +141,11 @@ class #Objet#Manager {
 			$q = $this->bdd->prepare('UPDATE #table# SET [implode]#var2# = :#var2#[/implode] WHERE id = :id');
 			$q->bindValue(':id', $#objet#->getId(), PDO::PARAM_INT);
 		}
-[loop]		$q->bindValue(':#var3#', $#objet#->get#Var3#(), PDO::#opt#);
+[loop]
+[int]		$q->bindValue(':#var3#', $#objet#->get#Var3#(), PDO::PARAM_INT);
+[/int]
+[default]		$q->bindValue(':#var3#', $#objet#->get#Var3#(), PDO::PARAM_STR);
+[/default]
 [/loop]
 
 		$q->execute();

@@ -15,6 +15,21 @@ class Utils {
         $sub = substr($str, strpos($str,$from)+strlen($from), strlen($str));
         return substr($sub, 0, strpos($sub,$to));
     }
+    
+    // recupere le code entre les balise de type $tag
+    public static function getCodeBtwTags($content, $tag) {
+        $openTag = "[".$tag."]";
+        $closeTag = "[/".$tag."]";
+        $begin = strpos($content, $openTag); // cherche balise de debut
+        if ($begin !== false) {
+            $begin += strlen($openTag);
+            $end = strpos($content, $closeTag, $begin); // cherche la balise de fin
+             if ($begin !== false)
+                 return substr($content, $begin, $end-$begin);   
+        }
+        return false; // balises introuvable
+    }
+
 
     /**
      * Effectue le remplacement des iterations de ligne
@@ -65,15 +80,15 @@ class Utils {
 
 	// efface ou conserve les lignes de codes selon les options choisies
     public static function fetchOptionalCode(&$content, $tag, $state) {
-        $beginTag = "[".$tag."]";
-        $endTag = "[/".$tag."]";
+        $openTag = "[".$tag."]";
+        $closeTag = "[/".$tag."]";
         $btwTag = false; // pointeur entre les balises
 
         $lines = explode("\n", $content);
         $output = array();
         foreach($lines as $line) {
-            if (strpos($line, $beginTag) !== false) $btwTag = true;	
-            else if (strpos($line, $endTag) !== false)  $btwTag = false;	
+            if (strpos($line, $openTag) !== false) $btwTag = true;	
+            else if (strpos($line, $closeTag) !== false)  $btwTag = false;	
             else if ($btwTag && $state) $output[] = $line;
             else if (!$btwTag) $output[] = $line;
             //else echo htmlentities($line)."<br/>"; // debug rebus
@@ -82,38 +97,36 @@ class Utils {
     }
 
 
-// Ecrit les itérations du code
-    public static function fetchLoopCode(&$content, $var, $pieces, $opt = array()) {
-        $beginTag = "[loop]";
-        $endTag = "[/loop]";
-        $pos1 = strpos($content, $beginTag); // cherche la première balise
-        while ($pos1 !== false) {
-            if (($pos2 = strpos($content, $endTag, $pos1))!==false) {
-                // récupére le code entre les balises
-                $needle = substr ($content, $pos1, $pos2 + + strlen($endTag) - $pos1 );
-                //$code = preg_replace("/^(\r\n|\r|\n)|(\r\n|\r|\n|\t*)$/", "",$needle);
-                $code = str_replace(array($beginTag, $endTag), "", $needle);  // vire les balises 
-               // self::debugArray($code);
 
+
+    // Ecrit les itérations du code
+    public static function fetchLoopCode(&$content, $var, $pieces) {
+        $openTag = "[loop]";
+        $closeTag = "[/loop]";
+        $pos1 = strpos($content, $openTag); // cherche la première balise
+        while ($pos1 !== false) {
+            if (($pos2 = strpos($content, $closeTag, $pos1))!==false) {
+                // Récupére le code entre les balises
+                $needle = substr ($content, $pos1, $pos2 + + strlen($closeTag) - $pos1 );
+                // Recherche la variable à remplacer
                 if (strpos($needle, "#".$var."#") !== false || strpos($needle, "#".ucfirst($var)."#") !== false) {
-                     $tabout = array(); // vide le tableau
-                    foreach($pieces as $piece) {// Remplace $var pour chaque $pieces
-                        $search  = array('#'.$var.'#', '#'.ucfirst($var).'#', "#opt#");
-                         $replace = array($piece["Field"], self::formatVar(ucfirst($piece["Field"])));
-                         // ajoute le code optionnel #opt# en fonction du type de variable
-                        if ((isset( $opt[0])) && $piece["Type"] == "int" ) $replace[] =  $opt[0];
-                        if ((isset( $opt[1])) && $piece["Type"] == "date" ) $replace[] =  $opt[1];
-                        if ((isset( $opt[2])) && $piece["Type"] == "varchar" ) $replace[] =  $opt[2];
-                        if ((isset( $opt[3])) && $piece["Type"] == "text" ) $replace[] =  $opt[3];
-                        else $replace[] =  "";
-                         $tabout[] = str_replace($search,  $replace, $code);
+                    $tabout = array(); // vide le tableau
+                    foreach($pieces as $piece) { // Remplace $var pour chaque $pieces
+                        // Recherche si code pour le type [type]
+                        $code = self::getCodeBtwTags($needle, $piece["Type"]);
+                        if (!$code) { // sinon recherche du code [defaut]
+                            $code = self::getCodeBtwTags($needle, "default");
+                            if (!$code) // sinon prend le code entre les balises needle
+                                $code = str_replace(array($openTag, $closeTag), "", $needle);  // vire les balises 
                         }
-                    //self::debugArray($tabout);
-                    // remplace avec le code généré
+                        $search  = array('#'.$var.'#', '#'.ucfirst($var).'#');
+                        $replace = array($piece["Field"], self::formatVar(ucfirst($piece["Field"])));
+                        $tabout[] = str_replace($search,  $replace, $code);
+                        }
                     $content = str_replace( $needle, implode("", $tabout), $content);  // remplace le code    
                     }
                 }
-        $pos1 = strpos($content, $beginTag, $pos1 + strlen($needle)); // cherche la balise suivante
+        $pos1 = strpos($content, $openTag, $pos1 + strlen($needle)); // cherche la balise suivante
         }
     }
 
@@ -126,23 +139,23 @@ class Utils {
     **/
     public static function fetchImplode(&$content, $var, $pieces, $glue, $noId = true) {
         $tabout = array();
-        $beginTag = "[implode]";
-        $endTag = "[/implode]";
-        $pos1 = strpos($content, $beginTag); // cherche la première balise
+        $openTag = "[implode]";
+        $closeTag = "[/implode]";
+        $pos1 = strpos($content, $openTag); // cherche la première balise
         while ($pos1 !== false) {
-            if (($pos2 = strpos($content, $endTag, $pos1))!==false) {
+            if (($pos2 = strpos($content, $closeTag, $pos1))!==false) {
                 // récupére le code entre les balises
-                $needle = substr ($content, $pos1, $pos2 + + strlen($endTag) - $pos1 );
+                $needle = substr ($content, $pos1, $pos2 + + strlen($closeTag) - $pos1 );
                 if (strpos($needle, "#".$var."#") !== false) {
                     // récupére code sans les balises
-                    $code = str_replace(array($beginTag, $endTag), "", $needle);  // vire les balises  
+                    $code = str_replace(array($openTag, $closeTag), "", $needle);  // vire les balises  
                     foreach($pieces as $piece) // Remplace $var pour chaque $pieces
                         $tabout[] = str_replace( "#".$var."#", $piece["Field"], $code); 
                     // remplace avec le code généré
                     $content = str_replace( $needle, implode ($glue, $tabout), $content);  // remplace le code    
                     }
                 }
-        $pos1 = strpos($content, $beginTag, $pos1 + strlen($needle)); // cherche la balise suivante
+        $pos1 = strpos($content, $openTag, $pos1 + strlen($needle)); // cherche la balise suivante
         }
     }
 /* ------------------------------------------------------------- */

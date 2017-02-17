@@ -17,16 +17,17 @@
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">teams</table>
-		<objet attribut="input">team</objet>
-		<objets attribut="input">teams</objets>
+		<table attribut="select">peoples</table>
+		<objet attribut="input">people</objet>
+		<objets attribut="input">peoples</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,name</fields>
+		<fields attribut="field">id,team_id,firstname,lastname,birthdate,address,postcode,city</fields>
 
 		<linked_objet attribut="input"/>
 		<linked_objets attribut="input"/>
 		<search_engine attribut="checkbox"/>
+		<authentification attribut="checkbox"/>
 	</section>
 </webapp>

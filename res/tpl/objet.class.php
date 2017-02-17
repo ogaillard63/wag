@@ -33,14 +33,23 @@ class #Objet# {
 	}
 
 	/* --- Getters et Setters --- */
-
-[loop]	// #var#;
+[loop]
+[int]	// #var#;
 	public function set#Var#($#var#) {
-		$this->#var# = #opt#$#var#;
+		$this->#var# = (integer)$#var#;
 	}
 	public function get#Var#() {
 		return $this->#var#;
 	}
+[/int]
+[default]	// #var#;
+	public function set#Var#($#var#) {
+		$this->#var# = $#var#;
+	}
+	public function get#Var#() {
+		return $this->#var#;
+	}
+[/default]
 [/loop]
 [linked_objet]
 	// #linked_objet#

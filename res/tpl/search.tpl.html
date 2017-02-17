@@ -30,7 +30,7 @@
 					<thead>
 						<tr>
 [linked_objet]
-						<th>{##linked_objet##|ucfirst}</th>
+							<th>{##linked_objet##|ucfirst}</th>
 [/linked_objet]
 [loop]							<th>{##field##|ucfirst}</th>
 [/loop]
@@ -42,9 +42,12 @@
 [linked_objet]
 							<td align="left">{$#objet#->#linked_objet#->name}</td>
 [/linked_objet]
-[loop]						<td align="left">{$#field##opt#|replace:"{$query}":"<strong>{$query}</strong>"}</td
-[/loop]
-						</tr>
+[loop]
+[date]							<td align="left">{$#objet#->#field#|date_format:"%d/%m/%Y"|replace:"{$query}":"<strong>{$query}</strong>"}</td>
+[/date]
+[default]							<td align="left">{$#objet#->#field#|replace:"{$query}":"<strong>{$query}</strong>"}</td>
+[/default]
+[/loop]						</tr>
 						{/foreach}
 					</tbody>
 				</table>

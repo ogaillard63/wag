@@ -7,13 +7,18 @@
 */
 
 require_once( "inc/prepend.php" );
-//$user->isLoggedIn(); // Espace privé
-
+[authentification]
+$user->isLoggedIn(); // Espace privé
+[/authentification]
 // Récupération des variables
 $action			= Utils::get_input('action','both');
 $page			= Utils::get_input('page','both');
 $id				= Utils::get_input('id','both');
-[loop]$#var#			= Utils::get_input('#var#','post');
+[loop]
+[date]$#var#			= Utils::dateToSql(Utils::get_input('#var#','post'));
+[/date]
+[default]$#var#			= Utils::get_input('#var#','post');
+[/default]
 [/loop]
 [search_engine]
 $query			= Utils::get_input('query','post');
