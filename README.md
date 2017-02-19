@@ -8,6 +8,8 @@ des catégories. La table doit comporter un champ parent_id.
 
 - la table de l'objet lié doit avoir un champ name
 
+- Pour l'athentification, creer la table users avec le script sql "users.sql"
+
 # Bugs
 + Le bouton ANNULER des formulaires fait un submit
 + Pas de notification lors de l'effacement
@@ -29,6 +31,8 @@ Generer plusieurs versions de codes
  - Gestion simple d'un objet + recherche
  - Gestion simple d'un objet + objet lié
  - Gestion simple d'un objet + objet lié + recherche
+
+ 
 
 
 

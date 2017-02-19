@@ -10,22 +10,27 @@ query_too_short = texte de recherche trop court !
 
 # authentification
 logout = quitter
-users = utilisateurs
+
+#users
 user = utilisateur
-firstname = prenom
-name = nom
+users = utilisateurs
+firstname = prénom
+lastname = nom
+login = identifiant
 email = email
+password = mot de passe
+password_check = mot de passe (vérification)
 profil_id = profil_id
 profil = profil
 expiration = expiration
 last_cnx = last_cnx
-login = identifiant
-password = mot de passe
-password_check = mot de passe (vérification)
-list_of_users = liste de utilisateurs
-edit_user = modifier l'utilisateur
-delete_user = effacer l'utilisateur
-add_user = ajouter un utilisateur
+last_update = last_update
+list_of_users = liste des utilisateurs
+add_a_user = ajouter un utilisateur
+delete_a_user = effacer un utilisateur
+no_user = aucun utilisateur
+edit_a_user = modifier un utilisateur
+the_user_has_been_saved = l'utilisateur a été enregistré.
+the_user_has_been_deleted = l'utilisateur a été effacé.
 do_you_really_want_to_delete_this_user = voulez-vous vraiment effacer cet utilisateur
-
-# ------------------------- #
+passwords_dont_match = les mots de passe saisies sont differents ! 

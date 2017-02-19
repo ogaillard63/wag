@@ -84,7 +84,7 @@ class UserAuth extends User {
 		
 		$_SESSION["id"]   				= $this->getId();
 		$_SESSION["login"]  			= $this->getLogin();
-		$_SESSION["name"]  				= $this->getName();
+		$_SESSION["lastname"]  			= $this->getLastname();
 		$_SESSION["firstname"]  		= $this->getFirstname();
 		$_SESSION["email"] 				= $this->getEmail();
 		$_SESSION["profil_id"]			= $this->getProfilId();

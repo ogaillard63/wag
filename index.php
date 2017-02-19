@@ -22,6 +22,7 @@ define('TPL_FILEPATH', RES_PATH.'/form.html');
 // vars
 $hasSearchEngine = false;
 $hasLinkedObject = false;
+$hasAuth = false;
 
 require(RES_PATH . '/utils.php');
 $utils = new Utils(); // fonctions utilitaires
@@ -248,34 +249,29 @@ switch ($action) {
 			}
 			
 			/* ------- Génération du template header --------------------------- */
-			if ($hasSearchEngine) {
-				echo "> Fichier : <strong>header.tpl.html</strong><br/>";
+			echo "> Fichier : <strong>header.tpl.html</strong><br/>";
 
-				$tplFilePath = TPL_FOLDER."/"."header.tpl.html";
-				$ouputFilePath = O_TPL_PATH."/header.tpl.html";
+			$tplFilePath = TPL_FOLDER."/"."header.tpl.html";
+			$ouputFilePath = O_TPL_PATH."/header.tpl.html";
 
-				$content = file_get_contents($tplFilePath); // lit le template
-				utils::fetchOptionalCode($content, "authentification", $hasAuth);
+			$content = file_get_contents($tplFilePath); // lit le template
+			utils::fetchOptionalCode($content, "authentification", $hasAuth);
 
-				// efface les lignes de codes optionnelles
-				file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
-			}
-			
+			// efface les lignes de codes optionnelles
+			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			/* ------- Génération du fichier prepend --------------------------- */
-			if ($hasSearchEngine) {
-				echo "> Fichier : <strong>prepend.php</strong><br/>";
+			echo "> Fichier : <strong>prepend.php</strong><br/>";
 
-				$tplFilePath = TPL_FOLDER."/prepend.php";
-				$ouputFilePath = O_INC_PATH."/prepend.php";
+			$tplFilePath = TPL_FOLDER."/prepend.php";
+			$ouputFilePath = O_INC_PATH."/prepend.php";
 
-				$content = file_get_contents($tplFilePath); // lit le template
-				
-				// efface les lignes de codes optionnelles
-				utils::fetchOptionalCode($content, "authentification", $hasLinkedObject);
+			$content = file_get_contents($tplFilePath); // lit le template
+			
+			// efface les lignes de codes optionnelles
+			utils::fetchOptionalCode($content, "authentification", $hasLinkedObject);
 
-				// efface les lignes de codes optionnelles
-				file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
-			}
+			// efface les lignes de codes optionnelles
+			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			/* ------- Ajout des traductions en francais --------------------------- */
 			echo "> Fichier : <strong>fr.txt</strong><br/>";
 			$langFilePath = O_LANG_PATH."/fr.txt";

@@ -62,7 +62,7 @@ $log = new Logger($bdd, $smarty, $session);
 // Authentification
 $user = new UserAuth($bdd);
 if ($user->isLogged())
-	$smarty->assign("user", $session->getValue("firstname")." ".$session->getValue("name"));
+	$smarty->assign("user_logged", $session->getValue("firstname")." ".$session->getValue("lastname"));
 // Profils
 define('SUPER_ADMIN', 		300);
 define('ADMIN', 			200);

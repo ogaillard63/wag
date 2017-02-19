@@ -30,10 +30,10 @@
             </li>-->
       </ul>
       [authentification]
-       {if isset($user)}<ul class="nav navbar-nav navbar-right">
+       {if isset($user_logged)}<ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					{$user} <span class="glyphicon glyphicon-triangle-bottom"></span>
+					{$user_logged} <span class="glyphicon glyphicon-triangle-bottom"></span>
 				</a>
           <ul class="dropdown-menu">
             <li><a href="users.php"><span class="glyphicon glyphicon-user"></span> {#users#|ucfirst}</a></li>

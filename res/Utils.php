@@ -31,52 +31,6 @@ class Utils {
     }
 
 
-    /**
-     * Effectue le remplacement des iterations de ligne
-     * > $alt_types ! null on doit trouver la balise @default@ et toutes les balises contenu dans $alt_types
-     *
-     * @param $content
-     * @param $needles
-     * @param $fields
-     * @param $alt_types
-     * @param $exclude_fields
-     * @return mixed
-     */
-    public static function iterationReplace($content, $needles, $fields, $alt_types, $object, $exclude_fields = null, $exclude_types = null, $exclude_notchecked = false) {
-        foreach ($needles as $needle) {
-            $lines = array();
-            $type_str = array();
-            $line = self::getInnerSubstring($content, $needle, $needle);
-
-            if ($alt_types != null) {
-                $alt_types[] = "default";
-                //$type_str["default"] = self::getInnerSubstring($line, "@default@", "@default@");
-                foreach ($alt_types as $type) {
-                    $type_str[$type] = self::getInnerSubstring($line, "@".$type."@", "@".$type."@");
-                }
-
-               // $opt1 = self::getInnerSubstring($content, $needle, "@alt@");
-               // $opt2 = self::getInnerSubstring($content, "@alt@", $needle);
-            }
-            foreach ($fields as $col) {
-                if ($exclude_notchecked == false || $col["cb"] != 0) { // exclu les champs non cochés
-                    if ($exclude_types == null || !in_array($col["Type"], $exclude_types)) {
-                        if ($exclude_fields == null || !in_array($col["Field"], $exclude_fields)) {
-                            if ($alt_types != null) $str = (in_array($col["Type"], $alt_types)) ? $type_str[$col["Type"]] : $type_str["default"];
-                            else $str = $line;
-                            $lines[] = str_replace(array("#label#", "#Label#", "#field#"),
-                                array($col["Field"], utils::formatVar($col["Field"]), $object . "->" . $col["Field"]), $str);
-                            // , (strlen($col["Object"]) > 0 )?$col["Object"]:$col["Field"]
-                        }
-                    }
-                }
-            }
-            $content = str_replace($needle.$line.$needle, implode($lines, "\n"), $content);
-        }
-        return $content;
-    }
-
-/* ------------------------------------------------------------- */
 
 	// efface ou conserve les lignes de codes selon les options choisies
     public static function fetchOptionalCode(&$content, $tag, $state) {
@@ -126,7 +80,7 @@ class Utils {
                     $content = str_replace( $needle, implode("", $tabout), $content);  // remplace le code    
                     }
                 }
-        $pos1 = strpos($content, $openTag, $pos1 + strlen($needle)); // cherche la balise suivante
+        $pos1 = strpos($content, $openTag, $pos1 + strlen($openTag)); // cherche la balise suivante
         }
     }
 

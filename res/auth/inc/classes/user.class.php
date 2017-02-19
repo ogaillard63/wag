@@ -1,24 +1,24 @@
 <?php
 /**
- * @project		Travel Planner
- *
- * @author		Olivier Gaillard <olivier.gaillard@centrefrance.com>
- * @version		1.0 du 18/04/2014
- * @desc	   	Objet User
- */
+* @project		test
+* @author		Olivier Gaillard
+* @version		1.0 du 19/02/2017
+* @desc			Objet user
+*/
 
 class User {
-	
-	public $id; 
-	public $name;
+	public $id;
 	public $firstname;
+	public $lastname;
 	public $login;
 	public $email;
-	public $profil_id;
 	public $password;
+	public $profil_id;
 	public $expiration;
 	public $last_cnx;
-	
+	public $last_update;
+
+
 	public function __construct(array $data) {
 		$this->hydrate($data);
 	}
@@ -38,73 +38,78 @@ class User {
 		}
 	}
 
-	/* --- getters & setters --- */
-	
-	// id	
+	/* --- Getters et Setters --- */
+	// id;
 	public function setId($id) {
 		$this->id = (integer)$id;
 	}
 	public function getId() {
 		return $this->id;
 	}
-	// name
-	public function setName($name) {
-		$this->name = $name;
-	}
-	public function getName() {
-		return $this->name;
-	}
-	// firstname
+	// firstname;
 	public function setFirstname($firstname) {
-	    $this->firstname = $firstname;
+		$this->firstname = $firstname;
 	}
 	public function getFirstname() {
-	    return $this->firstname;
+		return $this->firstname;
 	}
-	// login
+	// lastname;
+	public function setLastname($lastname) {
+		$this->lastname = $lastname;
+	}
+	public function getLastname() {
+		return $this->lastname;
+	}
+	// login;
 	public function setLogin($login) {
-	    $this->login = $login;
+		$this->login = $login;
 	}
 	public function getLogin() {
-	    return $this->login;
+		return $this->login;
 	}
-	// email
+	// email;
 	public function setEmail($email) {
-	    $this->email = $email;
+		$this->email = $email;
 	}
 	public function getEmail() {
-	    return $this->email;
+		return $this->email;
 	}
-	// profil_id
+	// password;
+	public function setPassword($password) {
+		$this->password = $password;
+	}
+	public function getPassword() {
+		return $this->password;
+	}
+	// profil_id;
 	public function setProfilId($profil_id) {
-	    $this->profil_id = $profil_id;
+		$this->profil_id = (integer)$profil_id;
 	}
 	public function getProfilId() {
-	    return $this->profil_id;
+		return $this->profil_id;
 	}
-	// password
-	public function setMdp($password) {
-	    $this->password = $password;
-	}
-	public function getMdp() {
-	    return $this->password;
-	}
-	// expiration
+	// expiration;
 	public function setExpiration($expiration) {
-	    $this->expiration = $expiration;
+		$this->expiration = $expiration;
 	}
 	public function getExpiration() {
-	    return $this->expiration;
+		return $this->expiration;
 	}
-	// last_cnx
+	// last_cnx;
 	public function setLastCnx($last_cnx) {
-	    $this->last_cnx = $last_cnx;
+		$this->last_cnx = $last_cnx;
 	}
 	public function getLastCnx() {
-	    return $this->last_cnx;
+		return $this->last_cnx;
 	}
-	
-	/* --- methodes --- */
-	
+	// last_update;
+	public function setLastUpdate($last_update) {
+		$this->last_update = $last_update;
+	}
+	public function getLastUpdate() {
+		return $this->last_update;
+	}
+
+
 }
 ?>
