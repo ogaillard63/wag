@@ -5,8 +5,17 @@
  * @version		1.0 du 04/06/2012
  * @desc	   	Initialisation des ressources
  */
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
+use App\Session;
+use App\Logger;
+use App\UserAuth;
+use App\Translator;
+
+// Autoload
+require 'vendor/autoload.php';
+
+//ini_set('display_errors', 1);
+//error_reporting(E_ALL);
 
 setlocale(LC_ALL, 'fr_FR');
 date_default_timezone_set('Europe/Paris');
@@ -17,19 +26,6 @@ define('PATH_INC', 			PATH_APP.'/inc');
 define('PATH_LANG',			PATH_APP.'/lang');
 define('PATH_PROPERTIES', 	PATH_INC.'/properties');
 define('PATH_CLASSES', 		PATH_INC.'/classes');
-define('PATH_SMARTY', 		PATH_APP.'/../../vendor/smarty');
-
-// autoloader de classes
-function autoloader($class) {
-	if (substr($class, 0, 7) == 'Smarty_') {
-		require_once PATH_SMARTY.DS.'sysplugins'.DS.strtolower($class).'.php';
-	}
-	else {
-		if ($class == 'Smarty') require_once PATH_SMARTY.DS.$class.'.class.php';
-		else require_once PATH_CLASSES.DS.lcfirst($class).'.class.php';
-	}
-}
-spl_autoload_register('autoloader');
 
 // Paramètres de l'application
 $properties_filepath = PATH_PROPERTIES.DS.'properties.ini';

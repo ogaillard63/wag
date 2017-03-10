@@ -7,6 +7,7 @@
  * @desc	   	Gestion de l'identification des users
  */
 
+use App\Utils;
 require_once( "inc/prepend.php" );
 
 // Récupération des variables

@@ -136,9 +136,6 @@ switch ($action) {
 
 			*/
 			
-			
-			
-
 			// --------------------------- > Fichier de properties ---------------------------
 			echo "> Fichier : <strong>properties.ini</strong><br/>";
 			$tplFilePath = TPL_FOLDER.DS."properties.ini";
@@ -148,13 +145,14 @@ switch ($action) {
 
 			$search1  = array("#db_server#", "#db_user#", "#db_password#", '#db_base#');
 			$replace1 = array($db_server, $db_user, $db_password, $db_base,);
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search1, $replace1, $content));
 
 			// --------------------------- Génération de la classe ---------------------------
-			echo "> Fichier : <strong>".$objet.".class.php</strong><br/>";
+			echo "> Fichier : <strong>".ucfirst($objet).".php</strong><br/>";
 
-			$tplFilePath = TPL_FOLDER."/objet.class.php";
-			$ouputFilePath = O_CLASSES_PATH."/".$objet.".class.php";
+			$tplFilePath = TPL_FOLDER."/Objet.php";
+			$ouputFilePath = O_CLASSES_PATH."/".ucfirst($objet).".php";
 
 			$content = file_get_contents($tplFilePath); // lit le template
 			//utils::debugArray($cols);
@@ -162,32 +160,32 @@ switch ($action) {
 
 			// efface ou conserve les lignes de codes selon les options choisies
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
-
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération de la classe Manager --------------------------- */
-			echo "> Fichier : <strong>".$objet."Manager.class.php</strong><br/>";
+			echo "> Fichier : <strong>".ucfirst($objet)."Manager.php</strong><br/>";
 
-			$tplFilePath = TPL_FOLDER."/"."objetManager.class.php";
-			$ouputFilePath = O_CLASSES_PATH."/".$objet."Manager.class.php";
+			$tplFilePath = TPL_FOLDER."/"."ObjetManager.php";
+			$ouputFilePath = O_CLASSES_PATH."/".ucfirst($objet)."Manager.php";
 
 			$content = file_get_contents($tplFilePath); // lit le template
 			utils::fetchImplode($content, "var1", $colsNoId, " OR ");
 			utils::fetchImplode($content, "var2", $colsNoId, ", ");
 			utils::fetchLoopCode($content, "var3", $colsNoId);
 
-
 			// efface ou conserve les lignes de codes selon les options choisies
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
 			utils::fetchOptionalCode($content, "no_linked_objet", !$hasLinkedObject);
 			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
 
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du controleur --------------------------- */
 			echo "> Fichier : <strong>".$objets.".php</strong><br/>";
 
-			$tplFilePath = TPL_FOLDER."/"."objet.php";
+			$tplFilePath = TPL_FOLDER."/"."objets.php";
 			$ouputFilePath = O_PATH."/".$objets.".php";
 			$content = file_get_contents($tplFilePath); // lit le template
 
@@ -200,6 +198,7 @@ switch ($action) {
 			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
 			utils::fetchOptionalCode($content, "authentification", $hasAuth);
 
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template edit --------------------------- */
@@ -216,6 +215,7 @@ switch ($action) {
 			// efface les lignes de codes optionnelles
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
 
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 
 			/* ------- Génération du template list --------------------------- */
@@ -231,6 +231,7 @@ switch ($action) {
 			utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
 			utils::fetchOptionalCode($content, "search_engine", $hasSearchEngine);
 
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			
 			/* ------- Génération du template search --------------------------- */
@@ -245,6 +246,8 @@ switch ($action) {
 
 				// efface les lignes de codes optionnelles
 				utils::fetchOptionalCode($content, "linked_objet", $hasLinkedObject);
+				
+				// remplace les balises
 				file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
 			}
 			
@@ -255,10 +258,13 @@ switch ($action) {
 			$ouputFilePath = O_TPL_PATH."/header.tpl.html";
 
 			$content = file_get_contents($tplFilePath); // lit le template
-			utils::fetchOptionalCode($content, "authentification", $hasAuth);
 
 			// efface les lignes de codes optionnelles
+			utils::fetchOptionalCode($content, "authentification", $hasAuth);
+
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+
 			/* ------- Génération du fichier prepend --------------------------- */
 			echo "> Fichier : <strong>prepend.php</strong><br/>";
 
@@ -268,10 +274,25 @@ switch ($action) {
 			$content = file_get_contents($tplFilePath); // lit le template
 			
 			// efface les lignes de codes optionnelles
+			utils::fetchOptionalCode($content, "authentification", $hasAuth);
+
+			// remplace les balises
+			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+
+			/* ------- Génération du fichier composer.json --------------------------- */
+			echo "> Fichier : <strong>composer.json</strong><br/>";
+
+			$tplFilePath = TPL_FOLDER."/composer.json";
+			$ouputFilePath = O_PATH."/composer.json";
+
+			$content = file_get_contents($tplFilePath); // lit le template
+			
+			// efface les lignes de codes optionnelles
 			utils::fetchOptionalCode($content, "authentification", $hasLinkedObject);
 
-			// efface les lignes de codes optionnelles
+			// remplace les balises
 			file_put_contents($ouputFilePath, str_replace($search, $replace, $content));
+
 			/* ------- Ajout des traductions en francais --------------------------- */
 			echo "> Fichier : <strong>fr.txt</strong><br/>";
 			$langFilePath = O_LANG_PATH."/fr.txt";
@@ -294,11 +315,14 @@ switch ($action) {
 			$data .= "the_".$objet."_has_been_deleted = le ".$objet." a été effacé.\n";
 			$data .= "do_you_really_want_to_delete_this_".$objet." = voulez-vous vraiment effacer ce ".$objet."\n";
 
+			// remplace les balises
 			file_put_contents($langFilePath, $content . $data);
 
 			/* ------------------------------------------------------------------- */
 
-			echo "<br/><a target='_blank' href='".O_FOLDER.DS.$objets.".php'>Tester</a> | <a href='index.php'>Retour</a>";
+			echo "<br/><a href='index.php'>Retour</a>";
+			echo "<br/><br/><i>Effectuer un <b>composer update</b> dans le dossier de l'application avant de </i>";
+			echo "<a href='".O_FOLDER.DS.$objets.".php' target='_blank'>tester</a>";
 			exit();
 		}
 		break;

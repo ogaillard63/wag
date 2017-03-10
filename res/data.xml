@@ -2,28 +2,28 @@
 <webapp>
 	<section type="project">
 		<title>Project</title>
-		<project_name attribut="input">test</project_name>
+		<project_name attribut="input">Test Project</project_name>
 		<project_author attribut="input">Olivier Gaillard</project_author>
 	</section>
 	<section type="connection">
 		<title>Connection</title>
 		<db_server attribut="input">localhost</db_server>
-		<db_user attribut="input">memo_info</db_user>
-		<db_password attribut="input">memo_info</db_password>
+		<db_user attribut="input">lbc</db_user>
+		<db_password attribut="input">lbc</db_password>
 	</section>
 	<section type="database">
 		<title>Database</title>
-		<db_base attribut="select">test</db_base>
+		<db_base attribut="select">lbc</db_base>
 	</section>
 	<section type="table">
 		<title>Table</title>
-		<table attribut="select">peoples</table>
-		<objet attribut="input">people</objet>
-		<objets attribut="input">peoples</objets>
+		<table attribut="select">communes</table>
+		<objet attribut="input">commune</objet>
+		<objets attribut="input">communes</objets>
 	</section>
 	<section type="fields">
 		<title>Fields</title>
-		<fields attribut="field">id,team_id,firstname,lastname,birthdate,address,postcode,city</fields>
+		<fields attribut="field">id,cp,name,lat,lon,distance,duration</fields>
 
 		<linked_objet attribut="input"/>
 		<linked_objets attribut="input"/>

@@ -14,8 +14,8 @@ logout = quitter
 #users
 user = utilisateur
 users = utilisateurs
-firstname = prénom
 lastname = nom
+firstname = prénom
 login = identifiant
 email = email
 password = mot de passe

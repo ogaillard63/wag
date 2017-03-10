@@ -6,14 +6,17 @@
 * @desc			Controleur des objets : users
 */
 
+use App\Utils;
+use App\User;
+use App\UserManager;
 require_once( "inc/prepend.php" );
+
 $user->isLoggedIn(); // Espace privé
 $user->isAllowed(SUPER_ADMIN); // Espace privé
 
 
 // Récupération des variables
 $action			= Utils::get_input('action','both');
-$page			= Utils::get_input('page','both');
 $id				= Utils::get_input('id','both');
 $lastname		= Utils::get_input('lastname','post');
 $firstname		= Utils::get_input('firstname','post');
@@ -67,12 +70,7 @@ switch($action) {
 
 	default:
 		$smarty->assign("titre", $translate->__('list_of_users'));
-		$rpp = 10;
-		if (empty($page)) $page = 1; // Display first page
-		$smarty->assign("users", $user_manager->getUsersByPage($page, $rpp));
-		$pagination = new Pagination($page, $user_manager->getMaxUsers(), $rpp);
-		$smarty->assign("btn_nav", $pagination->getNavigation());
-
+		$smarty->assign("users", $user_manager->getUsers());
 		$smarty->assign("content", "users/list.tpl.html");
 		$smarty->display("main.tpl.html");
 }

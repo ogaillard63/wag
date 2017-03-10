@@ -38,11 +38,6 @@
 			</table>
 			{else}<h4>{#no_user#}</h4>{/if}
 			<div class="panel-footer">
-				<ul class="pagination">
-					{if not empty($btn_nav)} {foreach from=$btn_nav item=btn}
-					<li{if $btn.active} class="active" {/if}><a href="users.php?{$btn.link}">{$btn.label}</a></li>
-						{/foreach}{/if}
-				</ul>
 				<div class="btn-group pull-right">
 					<a href="users.php?action=add" class="btn btn-primary">{#add_a_user#|ucfirst}</a>
 				</div>
